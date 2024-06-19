@@ -2,6 +2,8 @@ const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 exports.signup = [
   body("first_name", "First name must be between 2 and 50 characters")
@@ -54,5 +56,46 @@ exports.signup = [
     } catch (err) {
       return next(err);
     }
+  }),
+];
+
+exports.signin = [
+  body("username").trim().escape(),
+  body("password").trim().escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.json({ errors });
+    } else {
+      passport.authenticate("local", { session: false }, (err, user, info) => {
+        if (err) {
+          return next(err);
+        }
+        if (!user) {
+          res.status(400).json({ message: "User does not exist", user: user });
+        } else {
+          req.login(user, { session: false });
+          jwt.sign(
+            { user: user },
+            "secret",
+            { expiresIn: "10d" },
+            (err, token) => {
+              if (err) {
+                console.log(err);
+              }
+
+              res.status(200).json({
+                token: token,
+                userId: user._id,
+                username: user.username,
+              });
+            },
+          );
+        }
+      });
+    }
+    req, res, next;
   }),
 ];
