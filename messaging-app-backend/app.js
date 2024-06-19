@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const routes = require("./routes");
 require("./config/database");
+require("./config/passport");
 const cors = require("cors");
 const app = express();
 
