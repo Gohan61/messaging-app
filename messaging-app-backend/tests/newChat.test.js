@@ -69,7 +69,6 @@ test("User can sign in", async () => {
 
 test("User can create a new chat", async () => {
   const payload = { userId: user1Id, otherUserId: user2Id };
-
   const authorization = {
     Authorization: `Bearer ${token}`,
   };
@@ -100,5 +99,24 @@ test("Returns error if user not found", async () => {
     .then((res) => {
       expect(res.status).toEqual(500);
       expect(res.error.text).toMatch(/User not found/);
+    });
+});
+
+test("Users have chat id added to document", async () => {
+  const payload = { userId: user1Id, otherUserId: user2Id };
+
+  const authorization = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const res = await request(app)
+    .post("/chat/newchat")
+    .send(payload)
+    .set("Content-Type", "application/json")
+    .set(authorization)
+    .then(async (res) => {
+      const user1 = await Usermodel.findById("621ff30d2a3e781873fcb663");
+
+      expect(`${user1.chats[1]}`).toEqual(`${res.body.chatId}`);
     });
 });
