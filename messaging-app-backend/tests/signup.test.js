@@ -48,7 +48,7 @@ test("Throws validation error", async () => {
   const payload = {
     first_name: "H",
     last_name: "Peter",
-    username: "Hpeter",
+    username: "Hpeters",
     password: "testing",
     age: 12,
     bio: "I am new here testing things out",
@@ -63,5 +63,25 @@ test("Throws validation error", async () => {
       expect(res.body.errors.errors[0].msg).toEqual(
         "First name must be between 2 and 50 characters",
       );
+    });
+});
+
+test("Throws error that user already exists", async () => {
+  const payload = {
+    first_name: "Hans",
+    last_name: "Peter",
+    username: "testing",
+    password: "testing",
+    age: 12,
+    bio: "I am new here testing things out",
+  };
+
+  const res = await request(app)
+    .post("/user/signup")
+    .send(payload)
+    .set("Content-Type", "application/json")
+    .set("Accept", "application/json")
+    .then((res) => {
+      expect(res.body.message).toEqual("Username already exists");
     });
 });
