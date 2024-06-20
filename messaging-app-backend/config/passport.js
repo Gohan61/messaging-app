@@ -4,14 +4,16 @@ const LocalStrategy = require("passport-local");
 const connection = require("./database");
 const JWTstrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
+require("dotenv").config();
 const opts = {};
 opts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = "secret";
+opts.secretOrKey = process.env.secret;
 const User = require("../models/user");
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
+      console.log(username);
       const user = await User.findOne({ username: username });
       if (!user) {
         return done(null, false, { message: "Incorrect username" });

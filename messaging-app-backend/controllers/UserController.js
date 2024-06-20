@@ -65,37 +65,33 @@ exports.signin = [
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
-      return res.json({ errors });
-    } else {
-      passport.authenticate("local", { session: false }, (err, user, info) => {
-        if (err) {
-          return next(err);
-        }
-        if (!user) {
-          res.status(400).json({ message: "User does not exist", user: user });
-        } else {
-          req.login(user, { session: false });
-          jwt.sign(
-            { user: user },
-            "secret",
-            { expiresIn: "10d" },
-            (err, token) => {
-              if (err) {
-                console.log(err);
-              }
-
-              res.status(200).json({
-                token: token,
-                userId: user._id,
-                username: user.username,
-              });
-            },
-          );
-        }
-      });
+      res.json({ message: "Validation Failed", errors: errors.array() });
+      return;
     }
-    req, res, next;
+    passport.authenticate("local", { session: false }, (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        res.json({ error: "User not found", user: user });
+      } else {
+        req.login(user, { session: false });
+        jwt.sign(
+          { user: user },
+          process.env.secret,
+          { expiresIn: "10d" },
+          (err, token) => {
+            if (err) console.log(err);
+
+            res.status(200).json({
+              token: token,
+              userID: user._id,
+              username: user.username,
+            });
+          },
+        );
+      }
+    })(req, res, next);
   }),
 ];
