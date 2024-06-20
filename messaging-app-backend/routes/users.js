@@ -20,4 +20,10 @@ router.get(
   user_controller.profile,
 );
 
+router.put(
+  "/:userId",
+  passport.authenticate("jwt", { session: false }),
+  user_controller.update_profile,
+);
+
 module.exports = router;
