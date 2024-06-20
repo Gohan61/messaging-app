@@ -1,7 +1,7 @@
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const LocalStrategy = require("passport-local");
-const connection = require("./database");
+require("./database");
 const JWTstrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 require("dotenv").config();
@@ -13,7 +13,6 @@ const User = require("../models/user");
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      console.log(username);
       const user = await User.findOne({ username: username });
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
@@ -30,13 +29,13 @@ passport.use(
 );
 
 passport.use(
-  new JWTstrategy(opts, (jwt_payload, done) => {
+  new JWTstrategy(opts, async (jwt_payload, done) => {
     try {
-      const user = User.findOne({ id: jwt_payload });
+      const user = await User.findById(jwt_payload.user._id);
       if (!user) {
         return done(null, false);
       } else {
-        return done, null, user;
+        return done(null, user);
       }
     } catch (err) {
       return done(err);
