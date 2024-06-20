@@ -25,9 +25,34 @@ exports.new_chat = asyncHandler(async (req, res, next) => {
       date: Date.now(),
     });
 
+    user.chats.push(chat._id);
+    await user.save();
+    console.log(user.chats);
+    otherUser.chats.push(chat._id);
+    await otherUser.save();
+
     await chat.save();
     return res
       .status(200)
       .json({ message: "New chat created", chatId: chat._id });
+  }
+});
+
+exports.get_chat = asyncHandler(async (req, res, next) => {
+  const chat = await Chat.findById(req.params.chatId);
+
+  if (!chat) {
+    const err = "Chat not found";
+    err.status = 404;
+    return next(err);
+  }
+  const otherUser = await User.findById(chat.users[1]);
+
+  if (!otherUser) {
+    const err = "User not found";
+    err.status = 404;
+    return next(err);
+  } else {
+    return res.status(200).json({ chat, otherUser });
   }
 });
