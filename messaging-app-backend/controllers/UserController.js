@@ -86,7 +86,7 @@ exports.signin = [
 
             res.status(200).json({
               token: token,
-              userID: user._id,
+              userId: user._id,
               username: user.username,
             });
           },
@@ -105,5 +105,17 @@ exports.userlist = asyncHandler(async (req, res, next) => {
     return next(err);
   } else {
     return res.status(200).json({ users });
+  }
+});
+
+exports.profile = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.userId);
+
+  if (!user) {
+    const err = new Error("No user found");
+    err.status = 404;
+    return next(err);
+  } else {
+    return res.status(200).json({ user });
   }
 });

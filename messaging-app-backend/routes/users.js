@@ -14,4 +14,10 @@ router.get(
   user_controller.userlist,
 );
 
+router.get(
+  "/:userId",
+  passport.authenticate("jwt", { session: false }),
+  user_controller.profile,
+);
+
 module.exports = router;
