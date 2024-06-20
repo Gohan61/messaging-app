@@ -60,7 +60,6 @@ test("Throws validation error", async () => {
     .set("Content-Type", "application/json")
     .set("Accept", "application/json")
     .then((res) => {
-      console.log(res.body.errors);
       expect(res.body.errors.errors[0].msg).toEqual(
         "First name must be between 2 and 50 characters",
       );
