@@ -95,3 +95,15 @@ exports.signin = [
     })(req, res, next);
   }),
 ];
+
+exports.userlist = asyncHandler(async (req, res, next) => {
+  const users = await User.find({}).exec();
+
+  if (!users) {
+    const err = new Error("No users found");
+    err.status = 404;
+    return next(err);
+  } else {
+    return res.status(200).json({ users });
+  }
+});
