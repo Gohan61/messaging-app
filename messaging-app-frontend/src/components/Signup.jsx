@@ -9,7 +9,7 @@ export default function Signup() {
     age: "",
     bio: "",
   });
-  const [error, setError] = useState("");
+  const [error, setError] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
