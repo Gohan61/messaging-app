@@ -16,4 +16,10 @@ router.get(
   chat_controller.get_chat,
 );
 
+router.post(
+  "/:chatId",
+  passport.authenticate("jwt", { session: false }),
+  chat_controller.send_chat,
+);
+
 module.exports = router;
