@@ -104,6 +104,7 @@ export default function Signup() {
           type="text"
           id="bio"
           name="bio"
+          rows={"8"}
           value={signupForm.bio}
           onChange={(e) =>
             setSignupForm({ ...signupForm, bio: e.target.value })

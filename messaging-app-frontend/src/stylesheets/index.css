@@ -66,3 +66,29 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.signin,
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  width: min(300px, 500px);
+  margin-top: 40px;
+  gap: 10px;
+  align-items: center;
+}
+
+.signin label,
+.signupForm label {
+  padding-bottom: 10px;
+}
+
+.signin input,
+.signupForm input,
+.signupForm textarea {
+  width: 100%;
+}
+
+.signin button,
+.signupForm button {
+  width: 100px;
+}

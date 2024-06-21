@@ -40,7 +40,7 @@ export default function Signin() {
 
   return (
     <>
-      <form action="" method="post">
+      <form action="" method="post" className="signin">
         <label htmlFor="username">Username: </label>
         <input
           type="text"
