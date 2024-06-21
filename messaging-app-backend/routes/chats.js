@@ -22,4 +22,10 @@ router.post(
   chat_controller.send_chat,
 );
 
+router.delete(
+  "/:chatId",
+  passport.authenticate("jwt", { session: false }),
+  chat_controller.delete_chat,
+);
+
 module.exports = router;

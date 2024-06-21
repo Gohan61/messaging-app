@@ -80,3 +80,16 @@ exports.send_chat = [
     }
   }),
 ];
+
+exports.delete_chat = asyncHandler(async (req, res, next) => {
+  const chat = await Chat.findById(req.params.chatId);
+
+  if (!chat) {
+    const err = "Chat not found";
+    err.status = 404;
+    return next(err);
+  } else {
+    await Chat.findByIdAndDelete(req.params.chatId);
+    return res.status(200).json({ message: "Chat deleted" });
+  }
+});
