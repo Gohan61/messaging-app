@@ -75,7 +75,7 @@ exports.signin = [
         return next(err);
       }
       if (!user) {
-        res.json({ error: "User not found", user: user });
+        res.status(500).json({ error: "User not found", user: user });
       } else {
         req.login(user, { session: false });
         jwt.sign(
