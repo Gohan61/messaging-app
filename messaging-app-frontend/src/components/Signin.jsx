@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function Signin() {
@@ -6,6 +7,7 @@ export default function Signin() {
     password: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const fetchToken = (event) => {
     event.preventDefault();
@@ -29,6 +31,7 @@ export default function Signin() {
           localStorage.setItem("Token", `Bearer ${res.token}`);
           localStorage.setItem("userId", res.userId);
           localStorage.setItem("username", res.username);
+          navigate("/");
         } else {
           throw res.error;
         }
@@ -63,7 +66,9 @@ export default function Signin() {
         />
         <button onClick={(e) => fetchToken(e)}>Submit</button>
       </form>
-      <p className="error">{error}</p>
+      <p className="error" data-testid="errors">
+        {error}
+      </p>
     </>
   );
 }

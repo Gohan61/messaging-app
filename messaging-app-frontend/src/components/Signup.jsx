@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [signupForm, setSignupForm] = useState({
@@ -10,6 +11,7 @@ export default function Signup() {
     bio: "",
   });
   const [error, setError] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -34,7 +36,7 @@ export default function Signup() {
       })
       .then((res) => {
         if (res.message === "You are signed up") {
-          console.log(res.message);
+          navigate("/");
         } else if (res.message === "Username already exists") {
           setError(res.message);
         } else {
@@ -113,7 +115,7 @@ export default function Signup() {
         <button onClick={(e) => handleSubmit(e)}>Submit</button>
       </form>
 
-      <div className="errors">
+      <div className="errors" data-testid="signupErrors">
         {error.map((item) => {
           return (
             <p className="error" key={item.path}>
