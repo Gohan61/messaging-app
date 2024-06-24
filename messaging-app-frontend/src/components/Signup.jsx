@@ -49,7 +49,7 @@ export default function Signup() {
   };
 
   return (
-    <>
+    <div className="signup">
       <form action="" method="post" className="signupForm">
         <label htmlFor="first_name">First name: </label>
         <input
@@ -124,6 +124,6 @@ export default function Signup() {
           );
         })}
       </div>
-    </>
+    </div>
   );
 }

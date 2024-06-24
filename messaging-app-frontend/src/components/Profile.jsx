@@ -77,7 +77,7 @@ export default function Profile() {
 
   if (updateProfile) {
     return (
-      <>
+      <div className="updateForm">
         <form action="" method="put" className="signupForm">
           <label htmlFor="first_name">First name: </label>
           <input
@@ -156,7 +156,7 @@ export default function Profile() {
             })
           )}
         </div>
-      </>
+      </div>
     );
   }
   return (
@@ -165,10 +165,10 @@ export default function Profile() {
         <p className="error">{error}</p>
       ) : (
         <>
-          <h1>
-            Your profile: {user.first_name} {user.last_name}
-          </h1>
           <div className="profile">
+            <h1>
+              Your profile: {user.first_name} {user.last_name}
+            </h1>
             <p className="first_name">
               <span>First name:</span> {user.first_name}
             </p>
@@ -184,8 +184,10 @@ export default function Profile() {
             <p className="bio">
               <span>Bio:</span> {user.bio}
             </p>
+            <button onClick={() => setUpdateProfile(true)}>
+              Update profile
+            </button>
           </div>
-          <button onClick={() => setUpdateProfile(true)}>Update profile</button>
         </>
       )}
     </>

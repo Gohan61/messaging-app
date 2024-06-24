@@ -7,10 +7,10 @@ export default function Profile() {
 
   return (
     <>
-      <h1>
-        Profile of: {userprop.first_name} {userprop.last_name}
-      </h1>
       <div className="profile">
+        <h1>
+          Profile of: {userprop.first_name} {userprop.last_name}
+        </h1>
         <p className="first_name">
           <span>First name:</span> {userprop.first_name}
         </p>

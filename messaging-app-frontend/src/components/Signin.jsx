@@ -44,8 +44,8 @@ export default function Signin() {
   };
 
   return (
-    <>
-      <form action="" method="post" className="signin">
+    <div className="signin">
+      <form action="" method="post" className="signinForm">
         <label htmlFor="username">Username: </label>
         <input
           type="text"
@@ -71,6 +71,6 @@ export default function Signin() {
       <p className="error" data-testid="errors">
         {error}
       </p>
-    </>
+    </div>
   );
 }

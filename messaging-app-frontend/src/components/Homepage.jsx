@@ -1,7 +1,7 @@
 export default function Homepage() {
   return (
-    <>
-      <h1>Welcome to the Book Stranger Chat</h1>
-    </>
+    <div className="homePage">
+      <h1 className="welcomeTitle">Welcome to the Book Stranger Chat</h1>
+    </div>
   );
 }

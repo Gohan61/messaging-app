@@ -32,24 +32,23 @@ export default function Userlist() {
     return <p>Loading</p>;
   } else {
     return (
-      <>
+      <div className="userList">
         <h1>All users</h1>
-        <div className="userList">
-          <ul>
-            {users.map((user) => {
-              return (
-                <>
-                  <li>
-                    <Link to={"userProfile"} state={{ userprop: user }}>
-                      {user.username}
-                    </Link>
-                  </li>
-                </>
-              );
-            })}
-          </ul>
-        </div>
-      </>
+
+        <ul>
+          {users.map((user) => {
+            return (
+              <>
+                <li>
+                  <Link to={"userProfile"} state={{ userprop: user }}>
+                    {user.username}
+                  </Link>
+                </li>
+              </>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 }
