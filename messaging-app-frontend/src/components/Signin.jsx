@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 
 export default function Signin() {
@@ -8,6 +8,7 @@ export default function Signin() {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [loginStatus, setLoginStatus] = useOutletContext();
 
   const fetchToken = (event) => {
     event.preventDefault();
@@ -31,6 +32,7 @@ export default function Signin() {
           localStorage.setItem("Token", `Bearer ${res.token}`);
           localStorage.setItem("userId", res.userId);
           localStorage.setItem("username", res.username);
+          setLoginStatus(true);
           navigate("/");
         } else {
           throw res.error;
