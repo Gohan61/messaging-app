@@ -104,8 +104,7 @@ exports.userlist = asyncHandler(async (req, res, next) => {
   ).exec();
 
   if (!users) {
-    const err = new Error("No users found");
-    err.status = 404;
+    const err = { message: "No users found", status: 404 };
     return next(err);
   } else {
     return res.status(200).json({ users });
@@ -119,8 +118,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
   );
 
   if (!user) {
-    const err = new Error("No user found");
-    err.status = 404;
+    const err = { message: "No user found", status: 404 };
     return next(err);
   } else {
     return res.status(200).json({ user });
