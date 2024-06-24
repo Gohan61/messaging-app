@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../stylesheets/App.css";
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
+import Chatsbar from "./Chatsbar";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(() => {
@@ -13,6 +14,7 @@ function App() {
   });
   return (
     <>
+      <Chatsbar />
       <Navbar props={{ loginStatus, setLoginStatus }} />
       <Outlet context={[loginStatus, setLoginStatus]}></Outlet>
     </>
