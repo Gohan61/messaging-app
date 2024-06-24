@@ -4,10 +4,12 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const routes = require("./routes");
-require("./config/database");
-require("./config/passport");
+// require("./config/database");
+// require("./config/passport");
+const initializeMongoServer = require("./config/databaseTest");
+initializeMongoServer();
+require("./config/passportTest");
 const cors = require("cors");
-const { error } = require("console");
 const app = express();
 
 app.use(cors());
@@ -38,7 +40,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error", { error: err });
+  res.send({ error: err });
 });
 
 module.exports = app;
