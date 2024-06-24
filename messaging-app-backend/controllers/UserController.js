@@ -150,6 +150,7 @@ exports.update_profile = [
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+    const currentUser = await User.findOne({ username: req.body.username });
 
     try {
       bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
@@ -160,17 +161,20 @@ exports.update_profile = [
           password: hashedPassword,
           age: req.body.age,
           bio: req.body.bio,
+          _id: currentUser._id,
         });
-        if (await User.exists({ username: req.body.username })) {
-          return res
-            .status(500)
-            .json({ message: "Username already exists", user });
+        if (currentUser.username !== req.body.username) {
+          if (await User.exists({ username: req.body.username })) {
+            return res
+              .status(500)
+              .json({ message: "Username already exists", user });
+          }
         } else if (!errors.isEmpty()) {
           return res.status(500).json({ errors, user });
         } else if (err) {
           throw new Error("Error");
         } else {
-          await user.save();
+          await User.findByIdAndUpdate(currentUser._id, user);
           return res.status(200).json({ message: "Your profile is updated" });
         }
       });
