@@ -32,7 +32,11 @@ describe("Signup", () => {
   it("Should sign user up", async () => {
     const user = userEvent.setup();
 
-    render(<Signup />);
+    render(
+      <BrowserRouter>
+        <Signup />
+      </BrowserRouter>,
+    );
 
     const first_nameInput = screen.getByLabelText("First name:");
     const last_nameInput = screen.getByLabelText("Last name:");

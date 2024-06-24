@@ -2,12 +2,17 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Signup from "../components/Signup";
 import userEvent from "@testing-library/user-event";
+import { BrowserRouter } from "react-router-dom";
 
 describe("Signup page", () => {
   it("Should display the validation errors", async () => {
     const user = userEvent.setup();
 
-    render(<Signup />);
+    render(
+      <BrowserRouter>
+        <Signup />
+      </BrowserRouter>,
+    );
 
     const first_nameInput = screen.getByLabelText("First name:");
     const last_nameInput = screen.getByLabelText("Last name:");
@@ -49,7 +54,11 @@ describe("Signin", () => {
   it("Should sign user up without errors", async () => {
     const user = userEvent.setup();
 
-    render(<Signup />);
+    render(
+      <BrowserRouter>
+        <Signup />
+      </BrowserRouter>,
+    );
 
     const first_nameInput = screen.getByLabelText("First name:");
     const last_nameInput = screen.getByLabelText("Last name:");
