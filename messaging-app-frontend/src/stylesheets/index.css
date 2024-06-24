@@ -24,8 +24,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -91,4 +89,17 @@ button:focus-visible {
 .signin button,
 .signupForm button {
   width: 100px;
+}
+
+.homePage {
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+.welcomeTitle {
+  font-size: 2em;
+}
+
+.signin,
+.signup {
+  grid-area: 2 / 2;
 }

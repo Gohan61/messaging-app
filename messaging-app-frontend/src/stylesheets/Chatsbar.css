@@ -1,0 +1,4 @@
+.chatsBar {
+  width: max(100px, 300px);
+  grid-area: 2 / 1 / 3 / 2;
+}
