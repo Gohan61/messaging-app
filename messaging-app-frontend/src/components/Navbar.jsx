@@ -19,6 +19,7 @@ export default function Navbar({ props }) {
               Logout
             </button>
             <Link to={"profile"}>Your profile</Link>
+            <Link to={"userList"}>All users</Link>
           </>
         ) : (
           <>

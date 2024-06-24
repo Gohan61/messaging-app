@@ -7,6 +7,8 @@ import Signup from "./components/Signup.jsx";
 import "./stylesheets/index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Profile from "./components/Profile.jsx";
+import Profiles from "./components/Profiles.jsx";
+import Userlist from "./components/Userlist.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,8 @@ const router = createBrowserRouter([
       { path: "signin", element: <Signin /> },
       { path: "signup", element: <Signup /> },
       { path: "profile", element: <Profile /> },
+      { path: "userList", element: <Userlist /> },
+      { path: "/userList/userProfile", element: <Profiles /> },
     ],
   },
 ]);
