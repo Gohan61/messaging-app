@@ -22,7 +22,7 @@ exports.signup = [
     .trim()
     .isLength({ min: 5, max: 100 })
     .escape(),
-  body("age", "Age must be a number").trim().isInt().escape(),
+  body("age", "Age must be a number").trim().isInt().optional().escape(),
   body("bio", "Bio must be between one and 200 characters")
     .trim()
     .isLength({ min: 1, max: 200 })
@@ -98,7 +98,10 @@ exports.signin = [
 ];
 
 exports.userlist = asyncHandler(async (req, res, next) => {
-  const users = await User.find({}).exec();
+  const users = await User.find(
+    {},
+    "first_name last_name username age bio",
+  ).exec();
 
   if (!users) {
     const err = new Error("No users found");
@@ -110,7 +113,10 @@ exports.userlist = asyncHandler(async (req, res, next) => {
 });
 
 exports.profile = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.userId);
+  const user = await User.findById(
+    req.params.userId,
+    "first_name last_name username age bio",
+  );
 
   if (!user) {
     const err = new Error("No user found");
