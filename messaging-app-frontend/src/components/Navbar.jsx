@@ -7,16 +7,19 @@ export default function Navbar({ props }) {
       <nav>
         <a href="/">Book Stranger Chat</a>
         {props.loginStatus ? (
-          <button
-            onClick={() => {
-              localStorage.removeItem("Token");
-              localStorage.removeItem("username");
-              localStorage.removeItem("userId");
-              props.setLoginStatus(false);
-            }}
-          >
-            Logout
-          </button>
+          <>
+            <button
+              onClick={() => {
+                localStorage.removeItem("Token");
+                localStorage.removeItem("username");
+                localStorage.removeItem("userId");
+                props.setLoginStatus(false);
+              }}
+            >
+              Logout
+            </button>
+            <Link to={"profile"}>Your profile</Link>
+          </>
         ) : (
           <>
             <Link to={"signin"}>Sign in</Link>
