@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Profiles from "./Profiles";
 import { Link } from "react-router-dom";
 
 export default function Userlist() {
@@ -34,17 +33,14 @@ export default function Userlist() {
     return (
       <div className="userList">
         <h1>All users</h1>
-
         <ul>
           {users.map((user) => {
             return (
-              <>
-                <li>
-                  <Link to={"userProfile"} state={{ userprop: user }}>
-                    {user.username}
-                  </Link>
-                </li>
-              </>
+              <li key={user.username}>
+                <Link to={"userProfile"} state={{ userprop: user }}>
+                  {user.username}
+                </Link>
+              </li>
             );
           })}
         </ul>
