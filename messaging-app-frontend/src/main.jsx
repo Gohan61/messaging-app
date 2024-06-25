@@ -9,6 +9,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Profile from "./components/Profile.jsx";
 import Profiles from "./components/Profiles.jsx";
 import Userlist from "./components/Userlist.jsx";
+import NewChat from "./components/NewChat.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: "profile", element: <Profile /> },
       { path: "userList", element: <Userlist /> },
       { path: "/userList/userProfile", element: <Profiles /> },
+      { path: "/:chatId", element: <NewChat /> },
     ],
   },
 ]);
