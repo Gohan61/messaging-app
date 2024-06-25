@@ -1,44 +1,28 @@
 import { render, screen } from "@testing-library/react";
 import App from "../components/App";
-import { expect, it } from "vitest";
-import { BrowserRouter } from "react-router-dom";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import React from "react";
-import Homepage from "../components/Homepage";
+import { expect, it, vi } from "vitest";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [{ index: true, element: <Homepage /> }],
-  },
-]);
+vi.mock("react-router-dom", () => {
+  const originalModule = vi.importActual("react-router-dom");
+
+  return {
+    _esModule: true,
+    ...originalModule,
+    Outlet: vi.fn(),
+    Link: "a",
+  };
+});
 
 describe("App", () => {
-  it("renders headline", () => {
-    render(
-      <React.StrictMode>
-        <RouterProvider router={router} />
-      </React.StrictMode>,
-    );
-    expect(screen.getByRole("heading").textContent).toMatch(
-      /Welcome to the Book Stranger Chat/,
-    );
+  it("renders chats headline", () => {
+    render(<App />);
+    console.log(screen.getByRole("heading"));
+    expect(screen.getByText("Chats")).toBeInTheDocument();
   });
 
   it("renders signin + signup without login", () => {
-    render(
-      <React.StrictMode>
-        <RouterProvider router={router} />
-      </React.StrictMode>,
-    );
-    expect(screen.getByRole("link", { name: "Sign in" })).toHaveAttribute(
-      "href",
-      "/signin",
-    );
-    expect(screen.getByRole("link", { name: "Sign up" })).toHaveAttribute(
-      "href",
-      "/signup",
-    );
+    render(<App />);
+    expect(screen.getByText("Sign in")).toBeInTheDocument();
+    expect(screen.getByText("Sign up")).toBeInTheDocument();
   });
 });

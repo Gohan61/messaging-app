@@ -1,19 +1,27 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import Signin from "../components/Signin";
 import Signup from "../components/Signup";
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter } from "react-router-dom";
+
+vi.mock("react-router-dom", () => {
+  const originalModule = vi.importActual("react-router-dom");
+  const loginStatus = false;
+  const setLoginStatus = () => {};
+
+  return {
+    _esModule: true,
+    ...originalModule,
+    useOutletContext: () => [loginStatus, setLoginStatus],
+    useNavigate: vi.fn(),
+  };
+});
 
 describe("Signin page errors", () => {
   it("Should display user not found", async () => {
     const user = userEvent.setup();
 
-    render(
-      <BrowserRouter>
-        <Signin />
-      </BrowserRouter>,
-    );
+    render(<Signin />);
 
     const usernameInput = screen.getByLabelText("Username:");
     const passwordInput = screen.getByLabelText("Password");
@@ -32,11 +40,7 @@ describe("Signup", () => {
   it("Should sign user up", async () => {
     const user = userEvent.setup();
 
-    render(
-      <BrowserRouter>
-        <Signup />
-      </BrowserRouter>,
-    );
+    render(<Signup />);
 
     const first_nameInput = screen.getByLabelText("First name:");
     const last_nameInput = screen.getByLabelText("Last name:");
@@ -66,11 +70,7 @@ describe("Login", () => {
   it("Should log user in", async () => {
     const user = userEvent.setup();
 
-    render(
-      <BrowserRouter>
-        <Signin />
-      </BrowserRouter>,
-    );
+    render(<Signin />);
 
     const usernameInputLogin = screen.getByLabelText("Username:");
     const passwordInputLogin = screen.getByLabelText("Password");
