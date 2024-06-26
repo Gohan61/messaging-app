@@ -11,6 +11,12 @@ router.post(
 );
 
 router.get(
+  "/chatList/:userId",
+  passport.authenticate("jwt", { session: false }),
+  chat_controller.get_chats,
+);
+
+router.get(
   "/:chatId",
   passport.authenticate("jwt", { session: false }),
   chat_controller.get_chat,
