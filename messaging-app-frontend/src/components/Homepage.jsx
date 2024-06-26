@@ -1,4 +1,4 @@
-import WelcomeImage from "../../public/beijing-1877354_1920.jpg";
+import WelcomeImage from "/beijing-1877354_1920.jpg";
 
 export default function Homepage() {
   return (
