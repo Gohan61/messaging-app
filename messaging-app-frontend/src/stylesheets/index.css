@@ -67,6 +67,13 @@ button:focus-visible {
   }
 }
 
+.container {
+  width: 100vw;
+  padding: 20px max(1rem, 50vw - 1175px /2);
+  display: flex;
+  gap: max(20px, 124px);
+}
+
 .welcomeImage {
   width: max(100px, 500px);
   object-fit: cover;

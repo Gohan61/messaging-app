@@ -1,14 +1,9 @@
 nav {
   display: flex;
-  justify-content: space-between;
-  padding: 30px;
+  padding: 20px max(2rem, 50vw - 1156px /2);
   background-color: rgb(0, 26, 128);
   grid-area: 1 / 1 / 2 / 3;
-  gap: 50px;
-}
-
-nav a:nth-child(1) {
-  margin-right: auto;
+  gap: max(20px, 600px);
 }
 
 nav a {
@@ -19,4 +14,9 @@ nav a {
   height: 30px;
   padding: 0 10px 0 10px;
   border: 0;
+}
+
+.links {
+  display: flex;
+  gap: 20px;
 }
