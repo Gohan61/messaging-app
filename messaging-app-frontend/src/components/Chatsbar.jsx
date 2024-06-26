@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Chatsbar({ loginStatus, props }) {
   const [chats, setChats] = useState([]);
   const [url, setUrl] = useState(
-    `https://messaging-app-backend.adaptable.app/${localStorage.getItem("userId")}`,
+    `https://messaging-app-backend.adaptable.app/chat/chatList/${localStorage.getItem("userId")}`,
   );
   const [error, setError] = useState("");
 

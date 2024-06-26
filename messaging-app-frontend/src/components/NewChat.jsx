@@ -43,7 +43,7 @@ export default function NewChat() {
   function sendMessage(e) {
     e.preventDefault();
 
-    fetch(`https://messaging-app-backend.adaptable.app/${chat._id}`, {
+    fetch(`https://messaging-app-backend.adaptable.app/chat/${chat._id}`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -75,7 +75,7 @@ export default function NewChat() {
   function deleteSubmit(e) {
     e.preventDefault();
 
-    fetch(`https://messaging-app-backend.adaptable.app/${chatId}`, {
+    fetch(`https://messaging-app-backend.adaptable.app/chat/${chatId}`, {
       method: "DELETE",
       mode: "cors",
       headers: {

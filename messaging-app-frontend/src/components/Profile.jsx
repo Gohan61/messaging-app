@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function Profile() {
   const [user, setUser] = useState("");
   const [url, setUrl] = useState(
-    `https://messaging-app-backend.adaptable.app/${localStorage.getItem("userId")}`,
+    `https://messaging-app-backend.adaptable.app/user/${localStorage.getItem("userId")}`,
   );
   const [error, setError] = useState("");
   const [updateProfile, setUpdateProfile] = useState(false);
@@ -42,22 +42,25 @@ export default function Profile() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    fetch(`https://messaging-app-backend.adaptable.app/${updateForm._id}`, {
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("Token"),
+    fetch(
+      `https://messaging-app-backend.adaptable.app/user/${updateForm._id}`,
+      {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("Token"),
+        },
+        body: JSON.stringify({
+          first_name: updateForm.first_name,
+          last_name: updateForm.last_name,
+          username: updateForm.username,
+          password: updateForm.password,
+          age: updateForm.age,
+          bio: updateForm.bio,
+        }),
       },
-      body: JSON.stringify({
-        first_name: updateForm.first_name,
-        last_name: updateForm.last_name,
-        username: updateForm.username,
-        password: updateForm.password,
-        age: updateForm.age,
-        bio: updateForm.bio,
-      }),
-    })
+    )
       .then((res) => {
         return res.json();
       })
