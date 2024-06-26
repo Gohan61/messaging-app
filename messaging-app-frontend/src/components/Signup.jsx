@@ -36,7 +36,7 @@ export default function Signup() {
       })
       .then((res) => {
         if (res.message === "You are signed up") {
-          navigate("/");
+          navigate("/signin");
         } else if (res.message === "Username already exists") {
           setError(res.message);
         } else {
