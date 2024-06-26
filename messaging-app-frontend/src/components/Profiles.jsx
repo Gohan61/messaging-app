@@ -59,7 +59,9 @@ export default function Profile() {
       </p>
       <button onClick={(e) => newChat(e)}>Send a message</button>
       <Link to={"/userList"}>Back to users list</Link>
-      <p className="error">{error.message}</p>
+      <p className="error" data-testid="profileError">
+        {error.message}
+      </p>
     </div>
   );
 }
