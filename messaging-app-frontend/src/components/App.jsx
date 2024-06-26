@@ -14,7 +14,7 @@ function App() {
   });
   return (
     <>
-      <Chatsbar />
+      <Chatsbar loginStatus={loginStatus} />
       <Navbar props={{ loginStatus, setLoginStatus }} />
       <Outlet context={[loginStatus, setLoginStatus]}></Outlet>
     </>
