@@ -28,6 +28,7 @@ exports.new_chat = asyncHandler(async (req, res, next) => {
     const chat = new Chat({
       users: [user._id, otherUser._id],
       otherUser: otherUser.username,
+      user: user.username,
       messages: [],
       date: Date.now(),
     });
