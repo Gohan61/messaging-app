@@ -161,6 +161,7 @@ exports.update_profile = [
           password: hashedPassword,
           age: req.body.age,
           bio: req.body.bio,
+          chats: currentUser.chats,
           _id: currentUser._id,
         });
         if (
