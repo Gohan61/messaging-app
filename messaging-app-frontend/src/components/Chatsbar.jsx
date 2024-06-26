@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../stylesheets/Chatsbar.css";
 import { Link } from "react-router-dom";
 
-export default function Chatsbar({ loginStatus }) {
+export default function Chatsbar({ loginStatus, props }) {
   const [chats, setChats] = useState([]);
   const [url, setUrl] = useState(
     `http://localhost:3000/chat/chatList/${localStorage.getItem("userId")}`,
@@ -28,7 +28,7 @@ export default function Chatsbar({ loginStatus }) {
           setError(res.error.message);
         }
       });
-  }, [url, JSON.stringify(chats)]);
+  }, [url, JSON.stringify(chats), props.deleteChat]);
 
   if (loginStatus) {
     return (
@@ -39,7 +39,11 @@ export default function Chatsbar({ loginStatus }) {
             ? chats.map((chat) => {
                 return (
                   <li key={chat._id}>
-                    <Link to={`/${chat._id}`}>{chat.otherUser}</Link>
+                    <Link to={`/${chat._id}`}>
+                      {localStorage.getItem("userId") !== chat.users[1]
+                        ? chat.otherUser
+                        : chat.user}
+                    </Link>
                   </li>
                 );
               })

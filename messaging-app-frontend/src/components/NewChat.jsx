@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 
 export default function NewChat() {
   const { chatId } = useParams();
@@ -7,6 +7,9 @@ export default function NewChat() {
   const [chat, setChat] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const [loginStatus, setLoginStatus, deleteChat, setDeleteChat] =
+    useOutletContext();
 
   const fetchMessages = useCallback(() => {
     fetch(`http://localhost:3000/chat/${chatId}`, {
@@ -69,6 +72,37 @@ export default function NewChat() {
       });
   }
 
+  function deleteSubmit(e) {
+    e.preventDefault();
+
+    fetch(`http://localhost:3000/chat/${chatId}`, {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("Token"),
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res.message === "Chat deleted") {
+          if (deleteChat) {
+            setDeleteChat(false);
+          } else {
+            setDeleteChat(true);
+          }
+          navigate("/");
+        } else {
+          throw res.error;
+        }
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }
+
   if (chat === "") {
     return <p>Loading</p>;
   } else {
@@ -95,6 +129,8 @@ export default function NewChat() {
           />
           <button onClick={(e) => sendMessage(e)}>Send message</button>
         </form>
+        <button onClick={() => fetchMessages()}>Check for new message</button>
+        <button onClick={(e) => deleteSubmit(e)}>Delete chat</button>
         <p className="error">{error.message}</p>
       </div>
     );
