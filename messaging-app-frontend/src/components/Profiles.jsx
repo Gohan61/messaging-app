@@ -10,7 +10,7 @@ export default function Profile() {
   function newChat(e) {
     e.preventDefault();
 
-    fetch("http://localhost:3000/chat/newchat", {
+    fetch("https://messaging-app-backend.adaptable.app/chat/newchat", {
       method: "POST",
       mode: "cors",
       headers: {

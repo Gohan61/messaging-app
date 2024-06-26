@@ -16,7 +16,7 @@ export default function Signup() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://localhost:3000/user/signup", {
+    fetch("https://messaging-app-backend.adaptable.app/user/signup", {
       mode: "cors",
       method: "POST",
       headers: {

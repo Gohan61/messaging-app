@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function Profile() {
   const [user, setUser] = useState("");
   const [url, setUrl] = useState(
-    `http://localhost:3000/user/${localStorage.getItem("userId")}`,
+    `https://messaging-app-backend.adaptable.app/${localStorage.getItem("userId")}`,
   );
   const [error, setError] = useState("");
   const [updateProfile, setUpdateProfile] = useState(false);
@@ -42,7 +42,7 @@ export default function Profile() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/user/${updateForm._id}`, {
+    fetch(`https://messaging-app-backend.adaptable.app/${updateForm._id}`, {
       method: "PUT",
       mode: "cors",
       headers: {

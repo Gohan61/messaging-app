@@ -12,7 +12,7 @@ export default function NewChat() {
     useOutletContext();
 
   const fetchMessages = useCallback(() => {
-    fetch(`http://localhost:3000/chat/${chatId}`, {
+    fetch(`https://messaging-app-backend.adaptable.app/chat/${chatId}`, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -43,7 +43,7 @@ export default function NewChat() {
   function sendMessage(e) {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/chat/${chat._id}`, {
+    fetch(`https://messaging-app-backend.adaptable.app/${chat._id}`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -75,7 +75,7 @@ export default function NewChat() {
   function deleteSubmit(e) {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/chat/${chatId}`, {
+    fetch(`https://messaging-app-backend.adaptable.app/${chatId}`, {
       method: "DELETE",
       mode: "cors",
       headers: {

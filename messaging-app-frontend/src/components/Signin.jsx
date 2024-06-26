@@ -13,7 +13,7 @@ export default function Signin() {
   const fetchToken = (event) => {
     event.preventDefault();
 
-    fetch("http://localhost:3000/user/signin", {
+    fetch("https://messaging-app-backend.adaptable.app/user/signin", {
       mode: "cors",
       method: "POST",
       headers: {

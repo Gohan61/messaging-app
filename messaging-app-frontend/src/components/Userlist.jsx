@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Userlist() {
-  const [url, setUrl] = useState(`http://localhost:3000/user/userlist`);
+  const [url, setUrl] = useState(
+    `https://messaging-app-backend.adaptable.app/user/userlist`,
+  );
   const [users, setUsers] = useState("");
   const [error, setError] = useState("");
 
