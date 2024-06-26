@@ -114,8 +114,8 @@ exports.userlist = asyncHandler(async (req, res, next) => {
 exports.profile = asyncHandler(async (req, res, next) => {
   const user = await User.findById(
     req.params.userId,
-    "first_name last_name username age bio",
-  );
+    "first_name last_name username age bio chats",
+  ).exec();
 
   if (!user) {
     const err = { message: "No user found", status: 404 };
@@ -150,7 +150,7 @@ exports.update_profile = [
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
-    const currentUser = await User.findById(req.params.userId);
+    const currentUser = await User.findById(req.params.userId).exec();
 
     try {
       bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
@@ -175,7 +175,7 @@ exports.update_profile = [
         } else if (err) {
           throw new Error("Error");
         } else {
-          await User.findByIdAndUpdate(currentUser._id, user);
+          await User.findByIdAndUpdate(currentUser._id, user).exec();
           return res.status(200).json({ message: "Your profile is updated" });
         }
       });
