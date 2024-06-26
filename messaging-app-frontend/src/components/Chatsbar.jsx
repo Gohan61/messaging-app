@@ -53,6 +53,6 @@ export default function Chatsbar({ loginStatus, props }) {
       </div>
     );
   } else {
-    return <h2>Please login to see your chats</h2>;
+    return <h2 className="chatsBarPrompt">Please login to see your chats</h2>;
   }
 }

@@ -72,8 +72,14 @@ button:focus-visible {
   object-fit: cover;
 }
 
-.signin,
-.signupForm {
+.signup,
+.signin {
+  display: flex;
+  justify-content: center;
+}
+
+.signupForm,
+.signinForm {
   display: flex;
   flex-direction: column;
   width: min(300px, 500px);
@@ -85,6 +91,8 @@ button:focus-visible {
 .signin label,
 .signupForm label {
   padding-bottom: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 .signin input,
