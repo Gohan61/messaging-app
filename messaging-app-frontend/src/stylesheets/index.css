@@ -73,7 +73,8 @@ button:focus-visible {
 }
 
 .signup,
-.signin {
+.signin,
+.updateForm {
   display: flex;
   justify-content: center;
 }
@@ -127,4 +128,39 @@ button:focus-visible {
 .signin,
 .signup {
   grid-area: 2 / 2;
+}
+
+.profile h1 {
+  font-size: 1.6em;
+}
+
+.profile span {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.userList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userList h1 {
+  font-size: 1.8em;
+}
+
+.userList ul {
+  width: max(100px, 300px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px dotted #213547;
+  padding: 0;
+}
+
+.userList ul li {
+  width: fit-content;
+  padding: 10px;
+  list-style: none;
 }
