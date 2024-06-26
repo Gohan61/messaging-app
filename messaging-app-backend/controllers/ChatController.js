@@ -27,14 +27,17 @@ exports.new_chat = asyncHandler(async (req, res, next) => {
   } else {
     const chat = new Chat({
       users: [user._id, otherUser._id],
+      otherUser: otherUser.username,
       messages: [],
       date: Date.now(),
     });
 
     user.chats.push(chat._id);
     await user.save();
-    otherUser.chats.push(chat._id);
-    await otherUser.save();
+    if (user._id !== otherUser._id) {
+      otherUser.chats.push(chat._id);
+      await otherUser.save();
+    }
 
     await chat.save();
     return res
@@ -50,7 +53,10 @@ exports.get_chat = asyncHandler(async (req, res, next) => {
     const err = { message: "Chat not found", status: 404 };
     return next(err);
   }
-  const otherUser = await User.findById(chat.users[1]).exec();
+  const otherUser = await User.findById(
+    chat.users[1],
+    "first_name last_name username age bio",
+  ).exec();
 
   if (!otherUser) {
     const err = { message: "User not found", status: 404 };
@@ -92,5 +98,18 @@ exports.delete_chat = asyncHandler(async (req, res, next) => {
   } else {
     await Chat.findByIdAndDelete(req.params.chatId);
     return res.status(200).json({ message: "Chat deleted" });
+  }
+});
+
+exports.get_chats = asyncHandler(async (req, res, next) => {
+  const userChats = await User.findById(req.params.userId, "chats").exec();
+  const chatIds = userChats.chats;
+  const chats = await Chat.find({ _id: { $in: chatIds } });
+
+  if (!chats) {
+    const err = { message: "No chats found", status: 404 };
+    return next(err);
+  } else {
+    return res.status(200).json({ chats });
   }
 });
