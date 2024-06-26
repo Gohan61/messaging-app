@@ -46,6 +46,7 @@ beforeAll(async () => {
       users: ["621ff30d2a3e781873fcb663", "621ff30d2a3e781873fcb664"],
       messages: [],
       date: "20-06-2024",
+      otherUser: "peter",
       _id: "621ff30d2a3e781873fcb669",
     });
 
@@ -88,7 +89,7 @@ test("User can send a new chat", async () => {
     .set("Content-Type", "application/json")
     .set(authorization)
     .then((res) => {
-      expect(res.body.chat.messages[0]).toEqual("First try");
+      expect(res.body.chat.messages[0].message).toEqual("First try");
     });
 });
 

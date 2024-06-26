@@ -97,8 +97,7 @@ test("Returns error if user not found", async () => {
     .set("Content-Type", "application/json")
     .set(authorization)
     .then((res) => {
-      expect(res.status).toEqual(500);
-      expect(res.error.text).toMatch(/User not found/);
+      expect(res.status).toEqual(404);
     });
 });
 

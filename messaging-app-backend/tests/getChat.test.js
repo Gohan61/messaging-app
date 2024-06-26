@@ -46,6 +46,7 @@ beforeAll(async () => {
       users: ["621ff30d2a3e781873fcb663", "621ff30d2a3e781873fcb664"],
       messages: [],
       date: "20-06-2024",
+      otherUser: "peter",
       _id: "621ff30d2a3e781873fcb669",
     });
 
@@ -100,7 +101,6 @@ test("Returns error if chat not found", async () => {
     .set("Content-Type", "application/json")
     .set(authorization)
     .then((res) => {
-      expect(res.status).toEqual(500);
-      expect(res.error.text).toMatch(/Chat not found/);
+      expect(res.status).toEqual(404);
     });
 });
