@@ -4,11 +4,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const routes = require("./routes");
-// require("./config/database");
-// require("./config/passport");
-const initializeMongoServer = require("./config/databaseTest");
-initializeMongoServer();
-require("./config/passportTest");
+require("./config/database");
+require("./config/passport");
 const cors = require("cors");
 const app = express();
 
