@@ -7,7 +7,7 @@ export default function Signup() {
     last_name: "",
     username: "",
     password: "",
-    age: "",
+    age: undefined,
     bio: "",
   });
   const [error, setError] = useState([]);
