@@ -6,6 +6,20 @@ nav {
   gap: max(20px, 600px);
 }
 
+@media (max-width: 1100px) {
+  nav {
+    display: flex;
+    padding: 20px max(2rem, 50vw - 1156px /2);
+    background-color: rgb(0, 26, 128);
+    grid-area: 1 / 1 / 2 / 4;
+    gap: clamp(50px, 4rem, 180px);
+  }
+
+  nav * {
+    font-size: 0.9em;
+  }
+}
+
 nav a {
   color: aliceblue;
 }

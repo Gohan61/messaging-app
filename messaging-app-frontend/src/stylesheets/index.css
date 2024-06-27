@@ -13,6 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 a {
@@ -84,6 +85,7 @@ button:focus-visible {
 .updateForm {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 .signupForm,
@@ -133,12 +135,28 @@ button:focus-visible {
 }
 
 .signin,
-.signup {
+.signup,
+.updateForm {
   grid-area: 2 / 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signin {
+  justify-content: flex-start;
+}
+
+.profile {
+  width: max(200px, 500px);
 }
 
 .profile h1 {
   font-size: 1.6em;
+}
+
+.profile p {
+  word-break: break-all;
 }
 
 .profile span {
@@ -170,4 +188,31 @@ button:focus-visible {
   width: fit-content;
   padding: 10px;
   list-style: none;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    width: 100vw;
+    padding: 20px max(1rem, 50vw - 1175px /2);
+    display: flex;
+    flex-direction: column;
+    gap: max(20px, 124px);
+  }
+
+  .profile,
+  .homePage {
+    width: max(200px, 300px);
+  }
+
+  .profile h1 {
+    font-size: 1.2em;
+  }
+
+  .profile p {
+    word-break: break-all;
+  }
+
+  .homePage p {
+    width: min(300px, 500px);
+  }
 }
