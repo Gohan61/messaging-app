@@ -8,7 +8,7 @@ export default function NewChat() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus, deleteChat, setDeleteChat] =
+  const [loginStatus, setLoginStatus, chatList, setNewChatList] =
     useOutletContext();
 
   const fetchMessages = useCallback(() => {
@@ -88,10 +88,10 @@ export default function NewChat() {
       })
       .then((res) => {
         if (res.message === "Chat deleted") {
-          if (deleteChat) {
-            setDeleteChat(false);
+          if (chatList) {
+            setNewChatList(false);
           } else {
-            setDeleteChat(true);
+            setNewChatList(true);
           }
           navigate("/");
         } else {

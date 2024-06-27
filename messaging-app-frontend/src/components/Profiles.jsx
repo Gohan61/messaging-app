@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 
 export default function Profile() {
   const location = useLocation();
   const userprop = location.state.userprop;
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [loginStatus, setLoginStatus, chatList, setNewChatList] =
+    useOutletContext();
 
   function newChat(e) {
     e.preventDefault();
@@ -27,6 +34,11 @@ export default function Profile() {
       })
       .then((res) => {
         if (res.message === "New chat created") {
+          if (chatList) {
+            setNewChatList(false);
+          } else {
+            setNewChatList(true);
+          }
           navigate(`/${res.chatId}`);
         } else {
           throw res.error;
