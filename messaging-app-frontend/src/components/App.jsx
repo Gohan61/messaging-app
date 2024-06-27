@@ -13,16 +13,27 @@ function App() {
     }
   });
   const [chatList, setNewChatList] = useState(false);
+  const [url, setUrl] = useState(
+    `http://localhost:3000/chat/chatList/${localStorage.getItem("userId")}`,
+  );
+
   return (
     <>
-      <Navbar props={{ loginStatus, setLoginStatus }} />
+      <Navbar props={{ loginStatus, setLoginStatus, setUrl }} />
       <div className="container">
         <Chatsbar
           loginStatus={loginStatus}
-          props={{ chatList, setNewChatList }}
+          props={{ chatList, setNewChatList, url, setUrl }}
         />
         <Outlet
-          context={[loginStatus, setLoginStatus, chatList, setNewChatList]}
+          context={[
+            loginStatus,
+            setLoginStatus,
+            chatList,
+            setNewChatList,
+            url,
+            setUrl,
+          ]}
         ></Outlet>
       </div>
     </>

@@ -4,13 +4,10 @@ import { Link } from "react-router-dom";
 
 export default function Chatsbar({ loginStatus, props }) {
   const [chats, setChats] = useState([]);
-  const [url, setUrl] = useState(
-    `https://messaging-app-backend.adaptable.app/chat/chatList/${localStorage.getItem("userId")}`,
-  );
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(url, {
+    fetch(props.url, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -28,7 +25,7 @@ export default function Chatsbar({ loginStatus, props }) {
           setError(res.error.message);
         }
       });
-  }, [url, JSON.stringify(chats), props.chatList]);
+  }, [props.url, JSON.stringify(chats), props.chatList]);
 
   if (loginStatus) {
     return (

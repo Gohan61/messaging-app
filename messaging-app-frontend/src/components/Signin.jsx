@@ -8,7 +8,8 @@ export default function Signin() {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useOutletContext();
+  const [loginStatus, setLoginStatus, chatList, setNewChatList, url, setUrl] =
+    useOutletContext();
 
   const fetchToken = (event) => {
     event.preventDefault();
@@ -33,6 +34,9 @@ export default function Signin() {
           localStorage.setItem("userId", res.userId);
           localStorage.setItem("username", res.username);
           setLoginStatus(true);
+          setUrl(
+            `http://localhost:3000/chat/chatList/${localStorage.getItem("userId")}`,
+          );
           navigate("/");
         } else {
           throw res.error;
