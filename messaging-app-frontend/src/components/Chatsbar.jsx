@@ -28,7 +28,7 @@ export default function Chatsbar({ loginStatus, props }) {
           setError(res.error.message);
         }
       });
-  }, [url, JSON.stringify(chats), props.deleteChat]);
+  }, [url, JSON.stringify(chats), props.chatList]);
 
   if (loginStatus) {
     return (

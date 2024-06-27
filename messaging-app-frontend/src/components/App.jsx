@@ -12,17 +12,17 @@ function App() {
       return false;
     }
   });
-  const [deleteChat, setDeleteChat] = useState(false);
+  const [chatList, setNewChatList] = useState(false);
   return (
     <>
       <Navbar props={{ loginStatus, setLoginStatus }} />
       <div className="container">
         <Chatsbar
           loginStatus={loginStatus}
-          props={{ deleteChat, setDeleteChat }}
+          props={{ chatList, setNewChatList }}
         />
         <Outlet
-          context={[loginStatus, setLoginStatus, deleteChat, setDeleteChat]}
+          context={[loginStatus, setLoginStatus, chatList, setNewChatList]}
         ></Outlet>
       </div>
     </>
