@@ -35,7 +35,7 @@ export default function Signin() {
           localStorage.setItem("username", res.username);
           setLoginStatus(true);
           setUrl(
-            `http://localhost:3000/chat/chatList/${localStorage.getItem("userId")}`,
+            `https://messaging-app-backend.adaptable.app/chat/chatList/${localStorage.getItem("userId")}`,
           );
           navigate("/");
         } else {

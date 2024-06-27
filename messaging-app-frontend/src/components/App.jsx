@@ -14,7 +14,7 @@ function App() {
   });
   const [chatList, setNewChatList] = useState(false);
   const [url, setUrl] = useState(
-    `http://localhost:3000/chat/chatList/${localStorage.getItem("userId")}`,
+    `https://messaging-app-backend.adaptable.app/chat/chatList/${localStorage.getItem("userId")}`,
   );
 
   return (
