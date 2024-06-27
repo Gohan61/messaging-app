@@ -17,6 +17,7 @@ export default function Navbar({ props }) {
                   localStorage.removeItem("userId");
                   props.setLoginStatus(false);
                   navigate("/");
+                  props.setUrl("");
                 }}
                 className="logoutButton"
               >
