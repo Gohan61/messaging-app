@@ -5,6 +5,7 @@ import {
   useNavigate,
   useOutletContext,
 } from "react-router-dom";
+import he from "he";
 
 export default function Profile() {
   const location = useLocation();
@@ -52,22 +53,23 @@ export default function Profile() {
   return (
     <div className="profile">
       <h1>
-        Profile of: {userprop.first_name} {userprop.last_name}
+        Profile of: {he.decode(userprop.first_name)}{" "}
+        {he.decode(userprop.last_name)}
       </h1>
       <p className="first_name">
-        <span>First name:</span> {userprop.first_name}
+        <span>First name:</span> {he.decode(userprop.first_name)}
       </p>
       <p className="last_name">
-        <span>Last name:</span> {userprop.last_name}
+        <span>Last name:</span> {he.decode(userprop.last_name)}
       </p>
       <p className="username">
-        <span>Username:</span> {userprop.username}
+        <span>Username:</span> {he.decode(userprop.username)}
       </p>
       <p className="age">
         <span>Age:</span> {userprop.age ? userprop.age : "Not specified"}
       </p>
       <p className="bio">
-        <span>Bio:</span> {userprop.bio}
+        <span>Bio:</span> {he.decode(userprop.bio)}
       </p>
       <button onClick={(e) => newChat(e)}>Send a message</button>
       <Link to={"/userList"}>Back to users list</Link>

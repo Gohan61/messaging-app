@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../stylesheets/Chatsbar.css";
 import { Link } from "react-router-dom";
+import he from "he";
 
 export default function Chatsbar({ loginStatus, props }) {
   const [chats, setChats] = useState([]);
@@ -38,8 +39,8 @@ export default function Chatsbar({ loginStatus, props }) {
                   <li key={chat._id}>
                     <Link to={`/${chat._id}`}>
                       {localStorage.getItem("userId") !== chat.users[1]
-                        ? chat.otherUser
-                        : chat.user}
+                        ? he.decode(chat.otherUser)
+                        : he.decode(chat.user)}
                     </Link>
                   </li>
                 );

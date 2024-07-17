@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import he from "he";
 
 export default function Profile() {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(undefined);
   const [url, setUrl] = useState(
     `http://localhost:3000/user/${localStorage.getItem("userId")}`,
   );
@@ -74,7 +75,9 @@ export default function Profile() {
         setUpdateFormError(error.errors);
       });
   }
-
+  if (!user) {
+    return <p>Loading</p>;
+  }
   if (updateProfile) {
     return (
       <div className="updateForm">
@@ -84,7 +87,7 @@ export default function Profile() {
             type="text"
             name="first_name"
             id="first_name"
-            value={updateForm.first_name}
+            value={he.decode(updateForm.first_name)}
             onChange={(e) =>
               setUpdateForm({ ...updateForm, first_name: e.target.value })
             }
@@ -94,7 +97,7 @@ export default function Profile() {
             type="text"
             id="last_name"
             name="last_name"
-            value={updateForm.last_name}
+            value={he.decode(updateForm.last_name)}
             onChange={(e) =>
               setUpdateForm({ ...updateForm, last_name: e.target.value })
             }
@@ -104,7 +107,7 @@ export default function Profile() {
             type="text"
             id="username"
             name="username"
-            value={updateForm.username}
+            value={he.decode(updateForm.username)}
             onChange={(e) =>
               setUpdateForm({ ...updateForm, username: e.target.value })
             }
@@ -135,7 +138,7 @@ export default function Profile() {
             id="bio"
             name="bio"
             rows={"8"}
-            value={updateForm.bio}
+            value={he.decode(updateForm.bio)}
             onChange={(e) =>
               setUpdateForm({ ...updateForm, bio: e.target.value })
             }
@@ -158,38 +161,40 @@ export default function Profile() {
         </div>
       </div>
     );
+  } else {
+    return (
+      <>
+        {error ? (
+          <p className="error">{error}</p>
+        ) : (
+          <>
+            <div className="profile">
+              <h1>
+                Your profile: {he.decode(user.first_name)}
+                {he.decode(user.last_name)}
+              </h1>
+              <p className="first_name">
+                <span>First name:</span> {he.decode(user.first_name)}
+              </p>
+              <p className="last_name">
+                <span>Last name:</span> {he.decode(user.last_name)}
+              </p>
+              <p className="username">
+                <span>Username:</span> {he.decode(user.username)}
+              </p>
+              <p className="age">
+                <span>Age:</span> {user.age ? user.age : "Not specified"}
+              </p>
+              <p className="bio">
+                <span>Bio:</span> {he.decode(user.bio)}
+              </p>
+              <button onClick={() => setUpdateProfile(true)}>
+                Update profile
+              </button>
+            </div>
+          </>
+        )}
+      </>
+    );
   }
-  return (
-    <>
-      {error ? (
-        <p className="error">{error}</p>
-      ) : (
-        <>
-          <div className="profile">
-            <h1>
-              Your profile: {user.first_name} {user.last_name}
-            </h1>
-            <p className="first_name">
-              <span>First name:</span> {user.first_name}
-            </p>
-            <p className="last_name">
-              <span>Last name:</span> {user.last_name}
-            </p>
-            <p className="username">
-              <span>Username:</span> {user.username}
-            </p>
-            <p className="age">
-              <span>Age:</span> {user.age ? user.age : "Not specified"}
-            </p>
-            <p className="bio">
-              <span>Bio:</span> {user.bio}
-            </p>
-            <button onClick={() => setUpdateProfile(true)}>
-              Update profile
-            </button>
-          </div>
-        </>
-      )}
-    </>
-  );
 }
