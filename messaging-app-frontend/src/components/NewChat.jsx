@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
+import he from "he";
 
 export default function NewChat() {
   const { chatId } = useParams();
@@ -109,13 +110,13 @@ export default function NewChat() {
     return (
       <div className="chatBox">
         <h3>
-          {otherUser.first_name} {otherUser.last_name}
+          {he.decode(otherUser.first_name)} {he.decode(otherUser.last_name)}
         </h3>
         <div className="messages">
           {chat.messages.length === 0
             ? "No messages"
             : chat.messages.map((message) => {
-                return <p key={message.id}>{message.message}</p>;
+                return <p key={message.id}>{he.decode(message.message)}</p>;
               })}
         </div>
         <form action="" method="post">

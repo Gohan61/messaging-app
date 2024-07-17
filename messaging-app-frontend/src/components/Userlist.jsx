@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import he from "he";
 
 export default function Userlist() {
   const [url, setUrl] = useState(
@@ -40,7 +41,7 @@ export default function Userlist() {
             return (
               <li key={user.username}>
                 <Link to={"userProfile"} state={{ userprop: user }}>
-                  {user.username}
+                  {he.decode(user.username)}
                 </Link>
               </li>
             );

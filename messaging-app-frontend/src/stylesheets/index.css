@@ -216,3 +216,23 @@ button:focus-visible {
     width: min(300px, 500px);
   }
 }
+
+.messages p:nth-child(odd) {
+  margin-right: auto;
+  width: fit-content;
+  background-color: #535bf2;
+  padding: 10px;
+  border-radius: 10px;
+  color: aliceblue;
+  font-size: 1.2em;
+}
+
+.messages p:nth-child(even) {
+  margin-left: auto;
+  width: fit-content;
+  background-color: #165a0e;
+  padding: 10px;
+  border-radius: 10px;
+  color: aliceblue;
+  font-size: 1.2em;
+}
