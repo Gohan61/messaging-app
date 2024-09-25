@@ -6,15 +6,13 @@ This project is build using a React frontend and backend using Express, NodeJS +
 
 The project is build according to the specification of the [Messaging App lesson](https://www.theodinproject.com/lessons/nodejs-messaging-app)
 
-## Live website
+## Preview
 
 The app is meant for people who want to discuss books with other people online.
 
 Simply sign up and find users you like to engage with based on their profile.
 
 ![Messaging app](./messaging-app-frontend/public/Messaging-app-display.png "Display of homepage for a logged in user")
-
-Access the [Messaging App](https://messaging-app-odin-frontend.netlify.app/)
 
 ## Run locally
 
