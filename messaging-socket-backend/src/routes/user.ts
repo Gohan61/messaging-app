@@ -7,4 +7,6 @@ router.get("/list", controller.getUserList);
 
 router.get("/:username", controller.getUserProfile);
 
+router.put("/:username", controller.updateUser);
+
 export default router;
