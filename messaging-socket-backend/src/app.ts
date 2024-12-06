@@ -3,7 +3,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import "dotenv/config";
 import * as routes from "../src/routes/index";
-import passport from "passport";
+import "./config/passport";
 
 const app = express();
 app.use(express.json());
@@ -15,7 +15,7 @@ io.on("connection", (socket) => {
   socket.emit("connect", { message: "a new client connected" });
 });
 
-app.use("/", passport.authenticate("jwt", { session: false }), routes.signinup);
+app.use("/", routes.signinup);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status | 500);
