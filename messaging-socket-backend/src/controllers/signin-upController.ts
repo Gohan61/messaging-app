@@ -25,7 +25,10 @@ export const signup = [
     .isLength({ min: 1 })
     .withMessage("Username cannot be empty")
     .isLength({ max: 20 })
-    .withMessage("Username can be maximum 20 characters long"),
+    .withMessage("Username can be maximum 20 characters long")
+    .not()
+    .isIn(["list"])
+    .withMessage("'list' cannot be used as username "),
   body("password")
     .trim()
     .isLength({ min: 1 })
