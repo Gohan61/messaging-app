@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import "dotenv/config";
 import * as routes from "../src/routes/index";
 import "./config/passport";
+import passport from "passport";
 
 const app = express();
 app.use(express.json());
@@ -16,6 +17,7 @@ io.on("connection", (socket) => {
 });
 
 app.use("/", routes.signinup);
+app.use("/user", passport.authenticate("jwt", { session: false }), routes.user);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status | 500);
