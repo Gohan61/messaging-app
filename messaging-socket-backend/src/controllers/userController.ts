@@ -156,3 +156,47 @@ export const updateUser = [
     }
   }),
 ];
+
+export const deleteUser = [
+  body("password")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Password cannot be empty"),
+
+  asyncHandler(async (req, res, next): Promise<any> => {
+    const username: string = req.params.username;
+    const password: string = req.body.password;
+    const user = await prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ errors: "User not found" });
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(500).json({ errors: "Incorrect password" });
+    }
+
+    try {
+      await prisma.message.deleteMany({
+        where: {
+          ownerUsername: user.username,
+        },
+      });
+
+      await prisma.user.delete({
+        where: {
+          username: user.username,
+        },
+      });
+
+      return res.status(200).json({ message: "User deleted" });
+    } catch (err) {
+      return next(err);
+    }
+  }),
+];

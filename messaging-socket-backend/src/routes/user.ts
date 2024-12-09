@@ -9,4 +9,6 @@ router.get("/:username", controller.getUserProfile);
 
 router.put("/:username", controller.updateUser);
 
+router.delete("/:username", controller.deleteUser);
+
 export default router;
