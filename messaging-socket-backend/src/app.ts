@@ -28,3 +28,6 @@ const port = process.env.PORT;
 httpServer.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
+export default app;
+export { httpServer };
