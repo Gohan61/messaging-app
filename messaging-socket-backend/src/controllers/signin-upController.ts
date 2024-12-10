@@ -109,7 +109,7 @@ export const signin = [
           return next(err);
         }
         if (!user) {
-          res.status(404).json({ error: "User not found", user });
+          res.status(404).json({ errors: "User not found", user });
         } else {
           req.logIn(user, { session: false }, (err) => {
             if (err) {
