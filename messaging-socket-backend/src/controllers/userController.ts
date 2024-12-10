@@ -171,6 +171,11 @@ export const deleteUser = [
         username: username,
       },
     });
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(500).json({ errors: errors });
+    }
 
     if (!user) {
       return res.status(404).json({ errors: "User not found" });
