@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "target": "ES2015",
+    "lib": ["ES2015"],
+    "types": ["vitest/globals", "vitest/jsdom", "@testing/library/jest-dom"]
+  }
+}
