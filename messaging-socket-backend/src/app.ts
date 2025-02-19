@@ -10,7 +10,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: { origin: "*" },
+});
 
 io.on("connection", (socket) => {
   socket.emit("connect", { message: "a new client connected" });
@@ -30,4 +32,4 @@ httpServer.listen(port, () => {
 });
 
 export default app;
-export { httpServer };
+export { io };
