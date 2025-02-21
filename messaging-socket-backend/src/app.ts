@@ -5,6 +5,7 @@ import "dotenv/config";
 import * as routes from "../src/routes/index";
 import "./config/passport";
 import passport from "passport";
+import { CustomError } from "./types/types";
 
 const app = express();
 app.use(express.json());
@@ -20,10 +21,16 @@ io.on("connection", (socket) => {
 
 app.use("/", routes.signinup);
 app.use("/user", passport.authenticate("jwt", { session: false }), routes.user);
+app.use("/chat", routes.chat);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(err.status | 500);
-  res.send({ error: err });
+app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
+  const status = err.status || 500;
+  const errorResponse = {
+    message: err.message || "Internal Server Error",
+    status,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+  };
+  res.status(status).send(errorResponse);
 });
 
 const port = process.env.PORT;
