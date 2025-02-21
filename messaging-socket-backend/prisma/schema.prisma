@@ -14,30 +14,48 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  first_name String?   @db.VarChar(30)
-  last_name  String?   @db.VarChar(30)
-  username   String    @unique @db.VarChar(20)
-  password   String    @db.VarChar(80)
+  id         Int     @id @default(autoincrement())
+  first_name String? @db.VarChar(30)
+  last_name  String? @db.VarChar(30)
+  username   String  @unique @db.VarChar(20)
+  password   String  @db.VarChar(80)
   bio        String?
-  chat       Chat[]
+
+  chats      UsersInChat[]
   messages   Message[]
+  ownedChats Chat[]        @relation("chatOwner")
 }
 
 model Chat {
-  sid        String    @unique @db.VarChar(30)
-  users      User      @relation(fields: [recipients], references: [username])
-  recipients String
-  Message    Message[]
-  date       String    @db.VarChar(50)
+  id   Int    @id @default(autoincrement())
+  sid  String @unique @db.VarChar(50)
+  date String @db.VarChar(50)
+
+  owner         User   @relation("chatOwner", fields: [ownerUsername], references: [username])
+  ownerUsername String
+
+  messages    Message[]
+  usersInChat UsersInChat[]
+}
+
+model UsersInChat {
+  id Int @id @default(autoincrement())
+
+  user         User   @relation(fields: [userUsername], references: [username])
+  userUsername String
+
+  chat    Chat   @relation(fields: [chatSid], references: [sid])
+  chatSid String
 }
 
 model Message {
-  id            String @unique @default(uuid())
+  id        String @unique @default(uuid())
+  message   String @db.VarChar(255)
+  timestamp String @db.VarChar(30)
+
   owner         User   @relation(fields: [ownerUsername], references: [username])
   ownerUsername String
-  sid           Chat   @relation(fields: [chatId], references: [sid])
-  chatId        String
-  message       String @db.VarChar(255)
-  timestamp     String @db.VarChar(30)
+
+  chat   Chat   @relation(fields: [chatId], references: [sid])
+  chatId String
 }
