@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
 
 app.use("/", routes.signinup);
 app.use("/user", passport.authenticate("jwt", { session: false }), routes.user);
-app.use("/chat", routes.chat);
+app.use("/chat", passport.authenticate("jwt", { session: false }), routes.chat);
 
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
   const status = err.status || 500;
