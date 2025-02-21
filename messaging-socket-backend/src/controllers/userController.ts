@@ -1,13 +1,24 @@
 import asyncHandler from "express-async-handler";
-import { body, validationResult } from "express-validator";
-import { PrismaClient } from "@prisma/client";
+import { body, ValidationError, validationResult } from "express-validator";
+import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Response, Request, NextFunction } from "express";
+import {
+  AllUsersType,
+  CustomError,
+  SingleResponseType,
+  UserProfile,
+} from "../types/types";
 
 const prisma = new PrismaClient();
 
 export const getUserProfile = asyncHandler(
-  async (req, res, next): Promise<any> => {
+  async (
+    req: Request,
+    res: Response<SingleResponseType<string> | SingleResponseType<UserProfile>>,
+    next: NextFunction
+  ): Promise<void> => {
     const username = req.params.username;
     const user = await prisma.user.findUnique({
       where: {
@@ -22,15 +33,19 @@ export const getUserProfile = asyncHandler(
     });
 
     if (!user) {
-      return res.status(404).json({ errors: "User not found" });
+      res.status(404).json({ errors: "User not found" });
     } else {
-      return res.status(200).json({ user: user });
+      res.status(200).json({ user: user });
     }
   }
 );
 
 export const getUserList = asyncHandler(
-  async (req, res, next): Promise<any> => {
+  async (
+    req: Request,
+    res: Response<AllUsersType | SingleResponseType<string>>,
+    next: NextFunction
+  ): Promise<void> => {
     const allUsers = await prisma.user.findMany({
       select: {
         first_name: true,
@@ -41,9 +56,9 @@ export const getUserList = asyncHandler(
     });
 
     if (allUsers.length === 0) {
-      return res.status(404).json({ errors: "No users found" });
+      res.status(404).json({ errors: "No users found" });
     } else {
-      return res.status(200).json({ allUsers: allUsers });
+      res.status(200).json({ allUsers: allUsers });
     }
   }
 );
@@ -88,73 +103,81 @@ export const updateUser = [
     .isLength({ max: 255 })
     .withMessage("Bio can be maximum 255 characters long"),
 
-  asyncHandler(async (req, res, next): Promise<any> => {
-    const errors = validationResult(req);
-    const body: {
-      first_name: string | undefined;
-      last_name: string | undefined;
-      oldUsername: string;
-      newUsername: string;
-      oldPassword: string;
-      newPassword: string | undefined;
-      bio: string | undefined;
-    } = req.body;
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response<
+        SingleResponseType<ValidationError[]> | SingleResponseType<string>
+      >,
+      next: NextFunction
+    ): Promise<void> => {
+      const errors = validationResult(req);
+      const body: {
+        first_name: string | undefined;
+        last_name: string | undefined;
+        oldUsername: string;
+        newUsername: string;
+        oldPassword: string;
+        newPassword: string | undefined;
+        bio: string | undefined;
+      } = req.body;
 
-    if (!errors.isEmpty()) {
-      return res.status(500).json({ errors: errors.array() });
-    }
-
-    const findUser = await prisma.user.findUnique({
-      where: {
-        username: body.oldUsername,
-      },
-    });
-    if (!findUser) {
-      return res.status(500).json({ errors: "Could not find user" });
-    }
-    const match = await bcrypt.compare(body.oldPassword, findUser.password);
-    if (!match) {
-      return res.status(500).json({ errors: "Incorrect password" });
-    }
-
-    try {
-      let hashedPassword: string = findUser.password;
-      if (body.newPassword) {
-        hashedPassword = bcrypt.hashSync(body.newPassword, 10);
-      }
-      let username: string;
-
-      if (body.oldUsername === body.newUsername) {
-        username = body.oldUsername;
-      } else {
-        username = body.newUsername;
+      if (!errors.isEmpty()) {
+        res.status(500).json({ errors: errors.array() });
       }
 
-      const user = await prisma.user.update({
+      const findUser = await prisma.user.findUnique({
         where: {
-          username: findUser.username,
-        },
-        data: {
-          first_name: body.first_name,
-          last_name: body.last_name,
-          username: username,
-          password: hashedPassword,
-          bio: body.bio,
+          username: body.oldUsername,
         },
       });
-
-      return res.status(200).json({ message: "User updated" });
-    } catch (err) {
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === "P2002"
-      ) {
-        return res.status(500).json({ errors: "Username already exists" });
+      if (!findUser) {
+        throw new CustomError("User not found", 404);
+      }
+      const match = await bcrypt.compare(body.oldPassword, findUser.password);
+      if (!match) {
+        throw new CustomError("Incorrect password", 500);
       }
 
-      return next(err);
+      try {
+        let hashedPassword: string = findUser.password;
+        if (body.newPassword) {
+          hashedPassword = bcrypt.hashSync(body.newPassword, 10);
+        }
+        let username: string;
+
+        if (body.oldUsername === body.newUsername) {
+          username = body.oldUsername;
+        } else {
+          username = body.newUsername;
+        }
+
+        const user = await prisma.user.update({
+          where: {
+            username: findUser.username,
+          },
+          data: {
+            first_name: body.first_name,
+            last_name: body.last_name,
+            username: username,
+            password: hashedPassword,
+            bio: body.bio,
+          },
+        });
+
+        res.status(200).json({ message: "User updated" });
+      } catch (err) {
+        if (
+          err instanceof PrismaClientKnownRequestError &&
+          err.code === "P2002"
+        ) {
+          res.status(500).json({ errors: "Username already exists" });
+        }
+
+        next(err);
+      }
     }
-  }),
+  ),
 ];
 
 export const deleteUser = [
@@ -163,45 +186,51 @@ export const deleteUser = [
     .isLength({ min: 1 })
     .withMessage("Password cannot be empty"),
 
-  asyncHandler(async (req, res, next): Promise<any> => {
-    const username: string = req.params.username;
-    const password: string = req.body.password;
-    const user = await prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(500).json({ errors: errors });
-    }
-
-    if (!user) {
-      return res.status(404).json({ errors: "User not found" });
-    }
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return res.status(500).json({ errors: "Incorrect password" });
-    }
-
-    try {
-      await prisma.message.deleteMany({
+  asyncHandler(
+    async (
+      req: Request,
+      res: Response<SingleResponseType<ValidationError[] | string>>,
+      next: NextFunction
+    ): Promise<void> => {
+      const username: string = req.params.username;
+      const password: string = req.body.password;
+      const user = await prisma.user.findUnique({
         where: {
-          ownerUsername: user.username,
+          username: username,
         },
       });
+      const errors = validationResult(req);
 
-      await prisma.user.delete({
-        where: {
-          username: user.username,
-        },
-      });
+      if (!errors.isEmpty()) {
+        res.status(500).json({ errors: errors.array() });
+      }
 
-      return res.status(200).json({ message: "User deleted" });
-    } catch (err) {
-      return next(err);
+      if (!user) {
+        throw new CustomError("User not found", 404);
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        throw new CustomError("Incorrect password", 500);
+      }
+
+      try {
+        await prisma.message.deleteMany({
+          where: {
+            ownerUsername: user.username,
+          },
+        });
+
+        await prisma.user.delete({
+          where: {
+            username: user.username,
+          },
+        });
+
+        res.status(200).json({ message: "User deleted" });
+      } catch (err) {
+        next(err);
+      }
     }
-  }),
+  ),
 ];
