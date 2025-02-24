@@ -33,7 +33,7 @@ export const getUserProfile = asyncHandler(
     });
 
     if (!user) {
-      res.status(404).json({ errors: "User not found" });
+      throw new CustomError("User not found", 404);
     } else {
       res.status(200).json({ user: user });
     }
@@ -56,7 +56,7 @@ export const getUserList = asyncHandler(
     });
 
     if (allUsers.length === 0) {
-      res.status(404).json({ errors: "No users found" });
+      throw new CustomError("No users found", 404);
     } else {
       res.status(200).json({ allUsers: allUsers });
     }
@@ -171,7 +171,7 @@ export const updateUser = [
           err instanceof PrismaClientKnownRequestError &&
           err.code === "P2002"
         ) {
-          res.status(500).json({ errors: "Username already exists" });
+          throw new CustomError("Username already exists", 500);
         }
 
         next(err);
