@@ -1,11 +1,11 @@
 import asyncHandler from "express-async-handler";
 import { io } from "../app";
 import { v4 as uuidv4 } from "uuid";
-import { body, validationResult } from "express-validator";
+import { body, ValidationError, validationResult } from "express-validator";
 import { PrismaClient } from "@prisma/client";
 import { format } from "date-fns";
 import { Request, Response, NextFunction } from "express";
-import { SingleResponseType } from "../types/types";
+import { CustomError, SingleResponseType } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -16,20 +16,25 @@ export const newChat = [
   asyncHandler(
     async (
       req: Request,
-      res: Response<SingleResponseType<string>>,
+      res: Response<SingleResponseType<string | ValidationError[]>>,
       next: NextFunction
     ): Promise<void> => {
       const randomSid = uuidv4();
       const recipientUsername = req.body.recipientUsername;
       const ownerUsername = req.body.ownerUsername;
+      const errors = validationResult(req);
 
-      io.sockets.on("connection", (socket) => {
-        socket.on("createNewChat", () => {
-          socket.join(randomSid);
-        });
-      });
+      if (!errors.isEmpty()) {
+        res.status(500).json({ errors: errors.array() });
+      }
 
       try {
+        io.sockets.on("connection", (socket) => {
+          socket.on("createNewChat", () => {
+            socket.join(randomSid);
+          });
+        });
+
         await prisma.chat.create({
           data: {
             sid: randomSid,
@@ -61,7 +66,7 @@ export const newChat = [
         });
         res.status(200).json({ message: "New chat created" });
       } catch (e) {
-        res.status(500).json({ errors: "Could not create new chat" });
+        throw new CustomError("Error creating chat", 500);
       }
     }
   ),
