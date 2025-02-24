@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import request from "supertest";
 import app from "../app";
-import { httpServer } from "../app";
+import { io } from "../app";
 import { seed } from "../config/seed";
 
 const databaseUrl = process.env.TEST_DATABASE_URL;
@@ -31,7 +31,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  httpServer.close();
+  io.close();
 });
 
 describe("user routes", () => {
@@ -42,7 +42,7 @@ describe("user routes", () => {
       .then((res) => {
         expect(res.status).toBe(200);
         expect(res.body.user).not.toBeFalsy();
-        expect(res.body.errors).toBeFalsy();
+        expect(res.body.errorMessage).toBeFalsy();
       });
   });
 
@@ -52,7 +52,7 @@ describe("user routes", () => {
       .set("Authorization", `Bearer ${JWTToken}`)
       .then((res) => {
         expect(res.status).toBe(404);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 
@@ -102,8 +102,8 @@ describe("user routes", () => {
         oldPassword: "henry",
       })
       .then((res) => {
-        expect(res.status).toBe(500);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.status).toBe(404);
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 
@@ -118,7 +118,7 @@ describe("user routes", () => {
       })
       .then((res) => {
         expect(res.status).toBe(500);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 
@@ -149,6 +149,7 @@ describe("user routes", () => {
         expect(res.status).toBe(200);
         expect(res.body.message).not.toBeFalsy();
         expect(res.body.errors).toBeFalsy();
+        expect(res.body.errorMessage).toBeFalsy();
       });
   });
 
@@ -177,7 +178,7 @@ describe("user routes", () => {
       })
       .then((res) => {
         expect(res.status).toBe(500);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 
@@ -199,7 +200,7 @@ describe("user routes", () => {
       .send({ password: "uwe" })
       .then((res) => {
         expect(res.status).toBe(404);
-        expect(res.body.errors).not.toBeFalsy;
+        expect(res.body.errorMessage).not.toBeFalsy;
       });
   });
 
@@ -210,7 +211,7 @@ describe("user routes", () => {
       .send({ password: "henry" })
       .then((res) => {
         expect(res.status).toBe(500);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import request from "supertest";
 import app from "../app";
-import { httpServer } from "../app";
+import { io } from "../app";
 
 const databaseUrl = process.env.TEST_DATABASE_URL;
 
@@ -20,7 +20,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  httpServer.close();
+  io.close();
 });
 
 describe("signin + signup routes", () => {
@@ -73,7 +73,7 @@ describe("signin + signup routes", () => {
       });
   });
 
-  it("Returns error on existing username", async () => {
+  it("Returns error on existing username for signup", async () => {
     const res = await request(app)
       .post("/signup")
       .type("form")
@@ -83,7 +83,7 @@ describe("signin + signup routes", () => {
       })
       .then((res) => {
         expect(res.status).toBe(500);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 
@@ -101,7 +101,7 @@ describe("signin + signup routes", () => {
       });
   });
 
-  it("Returns error on non-existing user", async () => {
+  it("Returns error on non-existing user on signin", async () => {
     const res = await request(app)
       .post("/signin")
       .type("form")
@@ -111,7 +111,7 @@ describe("signin + signup routes", () => {
       })
       .then((res) => {
         expect(res.status).toBe(404);
-        expect(res.body.errors).not.toBeFalsy();
+        expect(res.body.errorMessage).not.toBeFalsy();
       });
   });
 });
