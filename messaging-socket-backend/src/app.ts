@@ -26,7 +26,7 @@ app.use("/chat", passport.authenticate("jwt", { session: false }), routes.chat);
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
   const status = err.status || 500;
   const errorResponse = {
-    message: err.message || "Internal Server Error",
+    errorMessage: err.message || "Internal Server Error",
     status,
     stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   };
