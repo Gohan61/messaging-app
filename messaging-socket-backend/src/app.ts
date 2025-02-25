@@ -6,18 +6,19 @@ import * as routes from "../src/routes/index";
 import "./config/passport";
 import passport from "passport";
 import { CustomError } from "./types/types";
+import cors from "cors";
+import socketIo from "./controllers/socket_io";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: "*" },
+  cors: { origin: "http://localhost:5173", credentials: true },
 });
 
-io.on("connection", (socket) => {
-  socket.emit("connect", { message: "a new client connected" });
-});
+socketIo(io);
 
 app.use("/", routes.signinup);
 app.use("/user", passport.authenticate("jwt", { session: false }), routes.user);
@@ -30,6 +31,7 @@ app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
     status,
     stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   };
+
   res.status(status).send(errorResponse);
 });
 
@@ -39,4 +41,3 @@ httpServer.listen(port, () => {
 });
 
 export default app;
-export { io };
