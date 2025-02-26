@@ -193,7 +193,7 @@ describe("new message route", () => {
 describe("Get all chats route", () => {
   it("Returns all chats", async () => {
     const res = await request(app)
-      .get("/chat/all")
+      .get("/chat/all/testing")
       .set("Authorization", `Bearer ${JWTToken}`)
       .then((res) => {
         expect(res.status).toBe(200);
@@ -203,15 +203,9 @@ describe("Get all chats route", () => {
   });
 
   it("Returns error for non-existing user", async () => {
-    const body = {
-      username: "whodis",
-    };
-
     const res = await request(app)
-      .get("/chat/all")
+      .get("/chat/all/henry")
       .set("Authorization", `Bearer ${JWTToken}`)
-      .type("form")
-      .send(body)
       .then((res) => {
         expect(res.status).toBe(404);
         expect(res.body.errorMessage).not.toBeFalsy();

@@ -130,7 +130,7 @@ export const getAllChats = async (
   res: Response<SingleResponseType<Chat[] | []>>,
   next: NextFunction
 ): Promise<void> => {
-  const userName: string = req.body.username;
+  const userName: string = req.params.username;
 
   try {
     const chats = await prisma.chat.findMany({
