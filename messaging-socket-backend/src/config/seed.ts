@@ -9,12 +9,15 @@ const prisma = new PrismaClient({
   },
 });
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function seed() {
   const testUser = await prisma.user.upsert({
     where: { username: "testing" },
     update: {},
     create: {
-      id: 1,
       username: "testing",
       password: await bcrypt.hash("testing", 10),
       first_name: "testing",
@@ -27,12 +30,48 @@ export async function seed() {
     where: { username: "testing2" },
     update: {},
     create: {
-      id: 2,
       username: "testing2",
       password: await bcrypt.hash("testing2", 10),
       first_name: "testing2",
       last_name: "testing2",
       bio: "testing2",
+    },
+  });
+
+  // Needed because the syncing to DB is not instant
+  // leading to chat creation failing because the user
+  // does not exist in the DB yet
+  await delay(1000);
+
+  const chat1 = await prisma.chat.upsert({
+    where: { sid: "1" },
+    update: {},
+    create: {
+      sid: "1",
+      date: "01-01-2021",
+      owner: {
+        connect: {
+          username: "testing",
+        },
+      },
+      usersInChat: {
+        create: [
+          {
+            user: {
+              connect: {
+                username: "testing2",
+              },
+            },
+          },
+          {
+            user: {
+              connect: {
+                username: "testing",
+              },
+            },
+          },
+        ],
+      },
     },
   });
 }
