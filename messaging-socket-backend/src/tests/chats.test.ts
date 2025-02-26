@@ -189,3 +189,32 @@ describe("new message route", () => {
       });
   });
 });
+
+describe("Get all chats route", () => {
+  it("Returns all chats", async () => {
+    const res = await request(app)
+      .get("/chat/all")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body.data).toHaveLength(2);
+        expect(res.body.errors).toBeFalsy();
+      });
+  });
+
+  it("Returns error for non-existing user", async () => {
+    const body = {
+      username: "whodis",
+    };
+
+    const res = await request(app)
+      .get("/chat/all")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .type("form")
+      .send(body)
+      .then((res) => {
+        expect(res.status).toBe(404);
+        expect(res.body.errorMessage).not.toBeFalsy();
+      });
+  });
+});
