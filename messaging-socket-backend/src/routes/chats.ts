@@ -7,4 +7,6 @@ router.post("/new/chat", controller.newChat);
 
 router.post("/new/message", controller.newMessage);
 
+router.get("/all", controller.getAllChats);
+
 export default router;

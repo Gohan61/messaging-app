@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { format } from "date-fns";
 import { Request, Response, NextFunction } from "express";
 import { CustomError, SingleResponseType } from "../types/types";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Chat } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -124,3 +124,34 @@ export const newMessage = [
     }
   ),
 ];
+
+export const getAllChats = async (
+  req: Request,
+  res: Response<SingleResponseType<Chat[] | []>>,
+  next: NextFunction
+): Promise<void> => {
+  const userName: string = req.body.username;
+
+  try {
+    const chats = await prisma.chat.findMany({
+      where: {
+        usersInChat: {
+          some: {
+            userUsername: userName,
+          },
+        },
+      },
+      include: {
+        usersInChat: true,
+      },
+    });
+
+    if (chats.length === 0) {
+      return next(new CustomError("No chats found", 404));
+    }
+
+    res.status(200).json({ data: chats });
+  } catch (e) {
+    throw new CustomError("Error fetching chats", 500);
+  }
+};
