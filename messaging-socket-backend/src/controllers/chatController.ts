@@ -182,3 +182,50 @@ export const getSingleChat = async (
     throw new CustomError("Error fetching chat", 500);
   }
 };
+
+export const deleteChat = async (
+  req: Request,
+  res: Response<SingleResponseType<string>>,
+  next: NextFunction
+): Promise<void> => {
+  const chatSid: string = req.params.sid;
+  const userName = req.params.username;
+
+  const chat = await prisma.chat.findUnique({
+    where: {
+      sid: chatSid,
+    },
+  });
+
+  if (!chat) {
+    return next(new CustomError("Chat not found", 404));
+  }
+
+  if (chat.ownerUsername !== userName) {
+    return next(new CustomError("You are not the owner of this chat", 401));
+  }
+
+  try {
+    await prisma.message.deleteMany({
+      where: {
+        chatId: chatSid,
+      },
+    });
+
+    await prisma.usersInChat.deleteMany({
+      where: {
+        chatSid,
+      },
+    });
+
+    await prisma.chat.delete({
+      where: {
+        sid: chatSid,
+      },
+    });
+
+    res.status(200).json({ message: "Chat deleted" });
+  } catch (e) {
+    throw new CustomError("Error deleting chat", 500);
+  }
+};

@@ -11,4 +11,6 @@ router.get("/all/:username", controller.getAllChats);
 
 router.get("/:sid", controller.getSingleChat);
 
+router.delete("/:sid/:username", controller.deleteChat);
+
 export default router;
