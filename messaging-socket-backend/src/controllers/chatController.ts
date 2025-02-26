@@ -155,3 +155,30 @@ export const getAllChats = async (
     throw new CustomError("Error fetching chats", 500);
   }
 };
+
+export const getSingleChat = async (
+  req: Request,
+  res: Response<SingleResponseType<Chat | null>>,
+  next: NextFunction
+): Promise<void> => {
+  const chatSid: string = req.params.sid;
+
+  try {
+    const chat = await prisma.chat.findUnique({
+      where: {
+        sid: chatSid,
+      },
+      include: {
+        usersInChat: true,
+      },
+    });
+
+    if (!chat) {
+      return next(new CustomError("Chat not found", 404));
+    }
+
+    res.status(200).json({ data: chat });
+  } catch (e) {
+    throw new CustomError("Error fetching chat", 500);
+  }
+};

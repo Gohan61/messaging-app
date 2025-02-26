@@ -9,4 +9,6 @@ router.post("/new/message", controller.newMessage);
 
 router.get("/all/:username", controller.getAllChats);
 
+router.get("/:sid", controller.getSingleChat);
+
 export default router;
