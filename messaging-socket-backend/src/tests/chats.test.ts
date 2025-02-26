@@ -212,3 +212,27 @@ describe("Get all chats route", () => {
       });
   });
 });
+
+describe("Get single chat", () => {
+  it("Returns single chat", async () => {
+    const res = await request(app)
+      .get("/chat/1")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body.data).not.toBeFalsy();
+        expect(res.body.errorMessage).toBeFalsy();
+      });
+  });
+
+  it("Returns error for non-existing chat", async () => {
+    const res = await request(app)
+      .get("/chat/3")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(404);
+        expect(res.body.errorMessage).not.toBeFalsy();
+      });
+  });
+});
+
