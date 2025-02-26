@@ -97,7 +97,7 @@ export const newMessage = [
         });
 
         if (!chat) {
-          throw new CustomError("Chat not found", 404);
+          next(new CustomError("Chat not found", 404));
         }
 
         const newMessage = await prisma.message.create({
