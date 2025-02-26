@@ -14,15 +14,28 @@ const prisma = new PrismaClient({
 });
 
 beforeAll(async () => {
-  await prisma.message.deleteMany({});
-  await prisma.chat.deleteMany({});
-  await prisma.user.deleteMany({});
+  try {
+    await prisma.message.deleteMany({});
+    await prisma.usersInChat.deleteMany({});
+    await prisma.chat.deleteMany({});
+    await prisma.user.deleteMany({});
+  } catch (error) {
+    console.error("Error in beforeAll:", error);
+  }
 });
 
 afterAll(async () => {
-  io.close();
+  try {
+    await prisma.usersInChat.deleteMany({});
+    await prisma.message.deleteMany({});
+    await prisma.chat.deleteMany({});
+    await prisma.user.deleteMany({});
+    await prisma.$disconnect();
+    io.close();
+  } catch (error) {
+    console.error("Error in afterAll:", error);
+  }
 });
-
 describe("signin + signup routes", () => {
   it("User can sign up", async () => {
     const res = await request(app)

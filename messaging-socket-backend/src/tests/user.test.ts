@@ -16,22 +16,36 @@ const prisma = new PrismaClient({
 });
 
 beforeAll(async () => {
-  await prisma.message.deleteMany({});
-  await prisma.chat.deleteMany({});
-  await prisma.user.deleteMany({});
+  try {
+    await prisma.message.deleteMany({});
+    await prisma.usersInChat.deleteMany({});
+    await prisma.chat.deleteMany({});
+    await prisma.user.deleteMany({});
 
-  await seed();
+    await seed();
 
-  const res = await request(app)
-    .post("/signin")
-    .type("form")
-    .send({ username: "testing", password: "testing" });
+    const res = await request(app)
+      .post("/signin")
+      .type("form")
+      .send({ username: "testing", password: "testing" });
 
-  JWTToken = res.body.token;
+    JWTToken = res.body.token;
+  } catch (error) {
+    console.error("Error in beforeAll:", error);
+  }
 });
 
 afterAll(async () => {
-  io.close();
+  try {
+    await prisma.usersInChat.deleteMany({});
+    await prisma.message.deleteMany({});
+    await prisma.chat.deleteMany({});
+    await prisma.user.deleteMany({});
+    await prisma.$disconnect();
+    io.close();
+  } catch (error) {
+    console.error("Error in afterAll:", error);
+  }
 });
 
 describe("user routes", () => {
@@ -221,6 +235,8 @@ describe("user routes", () => {
       .set("Authorization", `Bearer ${JWTToken}`)
       .send({ password: "testing" })
       .then((res) => {
+        console.log(res.body);
+
         expect(res.status).toBe(200);
         expect(res.body.message).not.toBeFalsy();
         expect(res.body.errors).toBeFalsy();
