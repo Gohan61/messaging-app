@@ -221,6 +221,25 @@ export const deleteUser = [
           },
         });
 
+        await prisma.usersInChat.deleteMany({
+          where: {
+            OR: [
+              { userUsername: user.username },
+              {
+                chat: {
+                  ownerUsername: user.username,
+                },
+              },
+            ],
+          },
+        });
+
+        await prisma.chat.deleteMany({
+          where: {
+            ownerUsername: user.username,
+          },
+        });
+
         await prisma.user.delete({
           where: {
             username: user.username,
