@@ -4,7 +4,8 @@ import { ValidationError } from "express-validator";
 export type SingleResponseType<T> =
   | { message: T }
   | { errors: T }
-  | { user: T };
+  | { user: T }
+  | { data: T };
 
 type MessageAndValidationError = { message: string; errors: ValidationError[] };
 type NoUserFound = { errors: string; user: User };
