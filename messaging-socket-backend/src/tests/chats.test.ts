@@ -236,3 +236,35 @@ describe("Get single chat", () => {
   });
 });
 
+describe("Delete chat route", () => {
+  it("Returns error for non-owner chat", async () => {
+    const res = await request(app)
+      .delete("/chat/1/testing2")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(401);
+        expect(res.body.errorMessage).not.toBeFalsy();
+      });
+  });
+
+  it("Returns message on successful chat deletion", async () => {
+    const res = await request(app)
+      .delete("/chat/1/testing")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body.message).not.toBeFalsy();
+        expect(res.body.errorMessage).toBeFalsy();
+      });
+  });
+
+  it("Returns error for non-existing chat", async () => {
+    const res = await request(app)
+      .delete("/chat/3/testing")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(404);
+        expect(res.body.errorMessage).not.toBeFalsy();
+      });
+  });
+});
