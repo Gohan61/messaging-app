@@ -229,3 +229,40 @@ export const deleteChat = async (
     throw new CustomError("Error deleting chat", 500);
   }
 };
+
+export const deleteMessage = async (
+  req: Request,
+  res: Response<SingleResponseType<string>>,
+  next: NextFunction
+): Promise<void> => {
+  const userName = req.params.username;
+  const messageId = req.params.messageId;
+
+  const message = await prisma.message.findUnique({
+    where: {
+      id: messageId,
+    },
+  });
+
+  if (!message) {
+    return next(new CustomError("Message not found", 404));
+  }
+
+  if (message.ownerUsername !== userName) {
+    return next(
+      new CustomError("You cannot delete someone else's message", 401)
+    );
+  }
+
+  try {
+    await prisma.message.delete({
+      where: {
+        id: messageId,
+      },
+    });
+
+    res.status(200).json({ message: "Message deleted" });
+  } catch (e) {
+    throw new CustomError("Error deleting message", 500);
+  }
+};
