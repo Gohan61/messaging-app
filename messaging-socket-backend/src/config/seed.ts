@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
+
+export const uuidMessage = uuidv4();
 
 const prisma = new PrismaClient({
   datasources: {
@@ -38,11 +41,6 @@ export async function seed() {
     },
   });
 
-  // Needed because the syncing to DB is not instant
-  // leading to chat creation failing because the user
-  // does not exist in the DB yet
-  await delay(1000);
-
   const chat1 = await prisma.chat.upsert({
     where: { sid: "1" },
     update: {},
@@ -74,14 +72,56 @@ export async function seed() {
       },
     },
   });
-}
 
-seed()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
+  const chat2 = await prisma.chat.upsert({
+    where: { sid: "2" },
+    update: {},
+    create: {
+      sid: "2",
+      date: "01-01-2021",
+      owner: {
+        connect: {
+          username: "testing",
+        },
+      },
+      usersInChat: {
+        create: [
+          {
+            user: {
+              connect: {
+                username: "testing2",
+              },
+            },
+          },
+          {
+            user: {
+              connect: {
+                username: "testing",
+              },
+            },
+          },
+        ],
+      },
+    },
   });
+
+  const message = await prisma.message.upsert({
+    where: { id: uuidMessage },
+    update: {},
+    create: {
+      id: uuidMessage,
+      message: "Hello",
+      timestamp: "2020-03-01",
+      chat: {
+        connect: {
+          sid: "2",
+        },
+      },
+      owner: {
+        connect: {
+          username: "testing",
+        },
+      },
+    },
+  });
+}
