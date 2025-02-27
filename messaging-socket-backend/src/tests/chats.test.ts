@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import request from "supertest";
 import app from "../app";
-import { seed } from "../config/seed";
+import { seed, uuidMessage } from "../config/seed";
 import { io } from "../app";
 
 const databaseUrl = process.env.TEST_DATABASE_URL;
@@ -27,9 +27,10 @@ beforeAll(async () => {
     const res = await request(app)
       .post("/signin")
       .type("form")
-      .send({ username: "testing", password: "testing" });
-
-    JWTToken = res.body.token;
+      .send({ username: "testing", password: "testing" })
+      .then((res) => {
+        JWTToken = res.body.token;
+      });
   } catch (error) {
     console.error("Error in beforeAll:", error);
   }
@@ -37,8 +38,8 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-    await prisma.usersInChat.deleteMany({});
     await prisma.message.deleteMany({});
+    await prisma.usersInChat.deleteMany({});
     await prisma.chat.deleteMany({});
     await prisma.user.deleteMany({});
     await prisma.$disconnect();
@@ -153,7 +154,7 @@ describe("new message route", () => {
 
   it("Returns no chat found error", async () => {
     const body = {
-      chatSid: "2",
+      chatSid: "8",
       ownerUsername: "testing",
       recipientUsername: "testing2",
       message: "Hello",
@@ -197,7 +198,7 @@ describe("Get all chats route", () => {
       .set("Authorization", `Bearer ${JWTToken}`)
       .then((res) => {
         expect(res.status).toBe(200);
-        expect(res.body.data).toHaveLength(2);
+        expect(res.body.data).toHaveLength(3);
         expect(res.body.errors).toBeFalsy();
       });
   });
@@ -261,6 +262,39 @@ describe("Delete chat route", () => {
   it("Returns error for non-existing chat", async () => {
     const res = await request(app)
       .delete("/chat/3/testing")
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(404);
+        expect(res.body.errorMessage).not.toBeFalsy();
+      });
+  });
+});
+
+describe("Delete message route", () => {
+  it("Returns error for non-owner message", async () => {
+    const res = await request(app)
+      .delete(`/chat/message/${uuidMessage}/testing2`)
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(401);
+        expect(res.body.errorMessage).not.toBeFalsy();
+      });
+  });
+
+  it("Returns message on successful message deletion", async () => {
+    const res = await request(app)
+      .delete(`/chat/message/${uuidMessage}/testing`)
+      .set("Authorization", `Bearer ${JWTToken}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body.message).not.toBeFalsy();
+        expect(res.body.errorMessage).toBeFalsy();
+      });
+  });
+
+  it("Returns error for non-existing message", async () => {
+    const res = await request(app)
+      .delete("/chat/message/3/testing")
       .set("Authorization", `Bearer ${JWTToken}`)
       .then((res) => {
         expect(res.status).toBe(404);
