@@ -107,7 +107,7 @@ export const signin = [
   asyncHandler(
     async (
       req: Request,
-      res: Response<SigninResponse | SingleResponseType<string>>,
+      res: Response<SigninResponse | SingleResponseType<ValidationError[]>>,
       next: NextFunction
     ): Promise<void> => {
       const errors = validationResult(req);
@@ -115,9 +115,9 @@ export const signin = [
       let token;
 
       if (!errors.isEmpty()) {
-        res
-          .status(404)
-          .json({ message: "Could not login user", errors: errors.array() });
+        res.status(404).json({
+          errors: errors.array(),
+        });
       }
 
       try {
