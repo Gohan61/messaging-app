@@ -4,6 +4,7 @@ import App from "./components/App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Chat from "./components/Chat";
 import Signup from "./components/Signup";
+import Signin from "./components/Signin";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,7 @@ const router = createBrowserRouter([
     children: [
       { path: "chat", element: <Chat /> },
       { path: "signup", element: <Signup /> },
+      { path: "signin", element: <Signin /> },
     ],
   },
 ]);
