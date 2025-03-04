@@ -202,7 +202,7 @@ export default function Signup() {
         <SubmitButton submitFunction={signupForm} body={form}></SubmitButton>
       </FormComponent>
 
-      <div>{error ? <p>{error}</p> : ""}</div>
+      {error ? <p className="text-red-600 pt-4 font-bold">{error}</p> : ""}
     </div>
   );
 }
