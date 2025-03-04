@@ -42,3 +42,14 @@ export interface inputProps {
   setValidationState: Dispatch<SetStateAction<validationErrors>>;
   validationState: validationErrors;
 }
+
+export interface textAreaProps {
+  name: string;
+  id: string;
+  value: string;
+  form: formState;
+  maxLength?: number;
+  stateSetter: Dispatch<SetStateAction<formState>>;
+  setValidationState: Dispatch<SetStateAction<validationErrors>>;
+  validationState: validationErrors;
+}

@@ -8,6 +8,8 @@ import {
   validationErrors,
   singleValidationError,
 } from "../types/types";
+import HeaderH1 from "./styled-components/HeaderH1";
+import TextArea from "./styled-components/TextArea";
 
 export default function Signup() {
   const [form, setForm] = useState<formState>({
@@ -178,9 +180,8 @@ export default function Signup() {
         )}
         <br />
         <Label htmlForValue={"bio"} labelText={"Bio: "}></Label>
-        <Input
+        <TextArea
           props={{
-            type: "text",
             id: "bio",
             name: "bio",
             value: form.bio,
@@ -190,7 +191,7 @@ export default function Signup() {
             setValidationState: setValidationError,
             validationState: validationError,
           }}
-        ></Input>
+        ></TextArea>
         {validationError.bio ? (
           <p className="text-red-700">{validationError.bio}</p>
         ) : (
