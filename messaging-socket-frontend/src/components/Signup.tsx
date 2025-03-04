@@ -4,15 +4,15 @@ import SubmitButton from "./styled-components/SubmitButton";
 import Label from "./styled-components/Label";
 import Input from "./styled-components/Input";
 import {
-  formState,
-  validationErrors,
+  signupFormState,
+  signupValidationErrors,
   singleValidationError,
 } from "../types/types";
 import HeaderH1 from "./styled-components/HeaderH1";
 import TextArea from "./styled-components/TextArea";
 
 export default function Signup() {
-  const [form, setForm] = useState<formState>({
+  const [form, setForm] = useState<signupFormState>({
     firstName: "",
     lastName: "",
     username: "",
@@ -21,17 +21,18 @@ export default function Signup() {
   });
 
   const [error, setError] = useState<string | null>(null);
-  const [validationError, setValidationError] = useState<validationErrors>({
-    firstName: null,
-    lastName: null,
-    username: null,
-    password: null,
-    bio: null,
-  });
+  const [validationError, setValidationError] =
+    useState<signupValidationErrors>({
+      firstName: null,
+      lastName: null,
+      username: null,
+      password: null,
+      bio: null,
+    });
 
   function signupForm(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    form: formState
+    form: signupFormState
   ) {
     e.preventDefault();
 

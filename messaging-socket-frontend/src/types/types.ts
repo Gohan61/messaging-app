@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export interface formState {
+export interface signupFormState {
   firstName: string;
   lastName: string;
   username: string;
@@ -10,7 +10,7 @@ export interface formState {
 
 export type SubmitFunctionType = (
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  body: formState
+  body: signupFormState
 ) => void;
 
 export interface singleValidationError {
@@ -23,7 +23,7 @@ export interface singleValidationError {
 
 export type validationErrorsType = singleValidationError[];
 
-export interface validationErrors {
+export interface signupValidationErrors {
   firstName: string | null;
   lastName: string | null;
   username: string | null;
@@ -36,20 +36,34 @@ export interface inputProps {
   id: string;
   name: string;
   value: string;
-  form: formState;
+  form: signupFormState | signinFormState;
   maxLength?: number;
-  stateSetter: Dispatch<SetStateAction<formState>>;
-  setValidationState: Dispatch<SetStateAction<validationErrors>>;
-  validationState: validationErrors;
+  stateSetter:
+    | Dispatch<SetStateAction<signupFormState>>
+    | Dispatch<SetStateAction<signinFormState>>;
+  setValidationState:
+    | Dispatch<SetStateAction<signupValidationErrors>>
+    | Dispatch<SetStateAction<signinValidationErrors>>;
+  validationState: signupValidationErrors | signinValidationErrors;
 }
 
 export interface textAreaProps {
   name: string;
   id: string;
   value: string;
-  form: formState;
+  form: signupFormState;
   maxLength?: number;
-  stateSetter: Dispatch<SetStateAction<formState>>;
-  setValidationState: Dispatch<SetStateAction<validationErrors>>;
-  validationState: validationErrors;
+  stateSetter: Dispatch<SetStateAction<signupFormState>>;
+  setValidationState: Dispatch<SetStateAction<signupValidationErrors>>;
+  validationState: signupValidationErrors;
+}
+
+export interface signinFormState {
+  username: string;
+  password: string;
+}
+
+export interface signinValidationErrors {
+  username: string | null;
+  password: string | null;
 }
