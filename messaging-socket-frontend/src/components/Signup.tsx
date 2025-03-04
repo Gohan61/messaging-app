@@ -94,8 +94,8 @@ export default function Signup() {
   }
 
   return (
-    <div>
-      <h1>Sign up</h1>
+    <div className="flex flex-col items-center">
+      <HeaderH1 text={"Sign up"}></HeaderH1>
       <FormComponent>
         <Label htmlForValue={"firstName"} labelText={"First name: "}></Label>
         <Input
