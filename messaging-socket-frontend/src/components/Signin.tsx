@@ -95,7 +95,7 @@ export default function Signin() {
           }}
         ></Input>
         {validationError.username ? (
-          <p className="text-red-700" data-testId="usernameError">
+          <p className="text-red-700" data-testid="usernameError">
             {validationError.username}
           </p>
         ) : (
@@ -117,7 +117,7 @@ export default function Signin() {
           }}
         ></Input>
         {validationError.password ? (
-          <p className="text-red-700" data-testId="passwordError">
+          <p className="text-red-700" data-testid="passwordError">
             {validationError.password}
           </p>
         ) : (
@@ -127,7 +127,7 @@ export default function Signin() {
         <SubmitButton submitFunction={signinForm} body={form}></SubmitButton>
       </FormComponent>
       {error ? (
-        <p className="text-red-600 pt-4 font-bold" data-testId="genericError">
+        <p className="text-red-600 pt-4 font-bold" data-testid="genericError">
           {error}
         </p>
       ) : (
