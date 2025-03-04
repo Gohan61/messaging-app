@@ -64,6 +64,7 @@ export const signup = [
 
       if (!errors.isEmpty()) {
         res.status(500).json({ errors: errors.array() });
+        return;
       }
 
       try {
@@ -118,6 +119,7 @@ export const signin = [
         res.status(404).json({
           errors: errors.array(),
         });
+        return;
       }
 
       try {
@@ -143,14 +145,10 @@ export const signin = [
           )(req, res, next);
         });
       } catch (err) {
-        next(err);
+        return next(err);
       }
 
       try {
-        if (!user) {
-          throw new CustomError("Something went wrong", 500);
-        }
-
         jwt.sign(
           { user: user },
           process.env.SECRET as string,
