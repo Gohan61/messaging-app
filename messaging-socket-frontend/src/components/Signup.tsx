@@ -116,7 +116,9 @@ export default function Signup() {
           }}
         ></Input>
         {validationError.firstName ? (
-          <p className="text-red-700">{validationError.firstName}</p>
+          <p className="text-red-700" data-testid="firstNameError">
+            {validationError.firstName}
+          </p>
         ) : (
           ""
         )}
@@ -136,7 +138,9 @@ export default function Signup() {
           }}
         ></Input>
         {validationError.lastName ? (
-          <p className="text-red-700">{validationError.lastName}</p>
+          <p className="text-red-700" data-testid="lastNameError">
+            {validationError.lastName}
+          </p>
         ) : (
           ""
         )}
@@ -156,7 +160,9 @@ export default function Signup() {
           }}
         ></Input>
         {validationError.username ? (
-          <p className="text-red-700">{validationError.username}</p>
+          <p className="text-red-700" data-testid="usernameError">
+            {validationError.username}
+          </p>
         ) : (
           ""
         )}
@@ -176,7 +182,9 @@ export default function Signup() {
           }}
         ></Input>
         {validationError.password ? (
-          <p className="text-red-700">{validationError.password}</p>
+          <p className="text-red-700" data-testid="passwordError">
+            {validationError.password}
+          </p>
         ) : (
           ""
         )}
@@ -195,7 +203,9 @@ export default function Signup() {
           }}
         ></TextArea>
         {validationError.bio ? (
-          <p className="text-red-700">{validationError.bio}</p>
+          <p className="text-red-700" data-testid="bioError">
+            {validationError.bio}
+          </p>
         ) : (
           ""
         )}
@@ -203,7 +213,13 @@ export default function Signup() {
         <SubmitButton submitFunction={signupForm} body={form}></SubmitButton>
       </FormComponent>
 
-      {error ? <p className="text-red-600 pt-4 font-bold">{error}</p> : ""}
+      {error ? (
+        <p className="text-red-600 pt-4 font-bold" data-testid="genericError">
+          {error}
+        </p>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
