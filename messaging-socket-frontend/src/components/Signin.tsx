@@ -6,13 +6,14 @@ import Label from "./styled-components/Label";
 import { signinFormState, signinValidationErrors } from "../types/types";
 import SubmitButton from "./styled-components/SubmitButton";
 import { singleValidationError } from "../types/types";
+import { useNavigate } from "react-router-dom";
 
 export default function Signin() {
   const [form, setForm] = useState<signinFormState>({
     username: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [validationError, setValidationError] =
     useState<signinValidationErrors>({
@@ -25,6 +26,7 @@ export default function Signin() {
     form: signinFormState
   ) {
     e.preventDefault();
+    let respStatus: number;
 
     fetch(`http://localhost:3000/signin`, {
       mode: "cors",
@@ -38,6 +40,7 @@ export default function Signin() {
       }),
     })
       .then((res) => {
+        respStatus = res.status;
         return res.json();
       })
       .then((res) => {
@@ -60,13 +63,15 @@ export default function Signin() {
         if (res.errorMessage) {
           setError(res.errorMessage);
         }
-        if (res.message) {
+        if (respStatus == 200) {
           setError(null);
           setValidationError({
             username: null,
             password: null,
           });
-          console.log(res.message);
+          localStorage.setItem("token", res.token);
+          localStorage.setItem("username", res.username);
+          navigate("/");
         }
       });
   }
@@ -90,7 +95,9 @@ export default function Signin() {
           }}
         ></Input>
         {validationError.username ? (
-          <p className="text-red-700">{validationError.username}</p>
+          <p className="text-red-700" data-testId="usernameError">
+            {validationError.username}
+          </p>
         ) : (
           ""
         )}
@@ -110,14 +117,22 @@ export default function Signin() {
           }}
         ></Input>
         {validationError.password ? (
-          <p className="text-red-700">{validationError.password}</p>
+          <p className="text-red-700" data-testId="passwordError">
+            {validationError.password}
+          </p>
         ) : (
           ""
         )}
         <br />
         <SubmitButton submitFunction={signinForm} body={form}></SubmitButton>
       </FormComponent>
-      {error ? <p className="text-red-600 pt-4 font-bold">{error}</p> : ""}
+      {error ? (
+        <p className="text-red-600 pt-4 font-bold" data-testId="genericError">
+          {error}
+        </p>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
