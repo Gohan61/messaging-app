@@ -10,6 +10,7 @@ import {
 } from "../types/types";
 import HeaderH1 from "./styled-components/HeaderH1";
 import TextArea from "./styled-components/TextArea";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [form, setForm] = useState<signupFormState>({
@@ -19,7 +20,7 @@ export default function Signup() {
     password: "",
     bio: "",
   });
-
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [validationError, setValidationError] =
     useState<signupValidationErrors>({
@@ -91,7 +92,7 @@ export default function Signup() {
             password: null,
             bio: null,
           });
-          console.log(res.message);
+          navigate("/signin");
         }
       });
   }
